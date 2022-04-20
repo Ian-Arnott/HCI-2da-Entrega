@@ -51,19 +51,22 @@
     </v-navigation-drawer>
 
     <v-main>
-      <HelloWorld/>
+      <!-- <HelloWorld/> -->
+      <DeviceList/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+// import HelloWorld from './components/HelloWorld';
+import DeviceList from './components/DeviceList';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    // HelloWorld,
+    DeviceList,
   },
 
   data(){
