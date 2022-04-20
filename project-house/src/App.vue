@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar
       app
-      color="#44692b"
+      color="primary"
       dark
     >
       <v-app-bar-nav-icon class="white--text" @click="drawer = !drawer"></v-app-bar-nav-icon>
