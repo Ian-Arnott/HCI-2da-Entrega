@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row class="text-center">
+    <v-row class="text-center" align="center" justify="center">
       <v-col>
         <h1>Devices</h1>
         <v-btn class="mx-2" fab dark small color="primary">
