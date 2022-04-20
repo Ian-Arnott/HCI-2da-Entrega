@@ -1,4 +1,4 @@
-# web-version
+# project-house
 
 ## Project setup
 ```
