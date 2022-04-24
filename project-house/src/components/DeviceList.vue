@@ -42,5 +42,8 @@
 <script>
 export default {
   name: "DeviceList",
+  data: () => ({
+    model: [],
+  }),
 };
 </script>
