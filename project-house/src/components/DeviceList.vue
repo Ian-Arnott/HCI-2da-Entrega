@@ -1,35 +1,31 @@
 <template>
   <v-container>
     <v-row class="text-center" align="center" justify="center">
-      <v-col>
+      <v-col cols="2">
         <h1>Devices</h1>
-        <v-btn class="mx-2" fab dark small color="primary">
+        <v-btn class="ma-4" fab dark small color="primary" @click="addDevice">
           <v-icon dark> mdi-plus </v-icon>
         </v-btn>
       </v-col>
-      <v-col>
-        <!-- Lista de dispositivos -->
 
+      <!-- Lista de dispositivos -->
+      <v-col cols="10">
+        <p v-show="devices.length == 0" >Empty list</p>
         <v-sheet class="mx-auto" max-width="800">
           <v-slide-group v-model="model" class="pa-4" multiple show-arrows>
-            <v-slide-item v-for="n in 15" :key="n" v-slot="{ active, toggle }">
+            <v-slide-item v-for="device in devices" :key="device" v-slot="{ active, toggle }">
               <v-card
-                :color="active ? 'primary' : 'grey lighten-1'"
-                class="ma-4"
-                height="200"
-                width="100"
+                :color="active ? 'primary' : 'secondary'"
+                class="ma-2"
+                height="150"
+                width="150"
                 @click="toggle"
               >
-                <v-row class="fill-height" align="center" justify="center">
-                  <v-scale-transition>
-                    <v-icon
-                      v-if="active"
-                      color="white"
-                      size="48"
-                      v-text="'mdi-close-circle-outline'"
-                    ></v-icon>
-                  </v-scale-transition>
-                </v-row>
+                <!-- Info del dispositivo -->
+                <v-icon light size="48" class="my-4"> mdi-lamp </v-icon>
+
+                <p class="my-2">{{ device }}</p> 
+                
               </v-card>
             </v-slide-item>
           </v-slide-group>
@@ -42,8 +38,23 @@
 <script>
 export default {
   name: "DeviceList",
+
   data: () => ({
-    model: [],
+    model: [],  // lista de vue con items activados
+    devices: [],
   }),
+
+  methods: {
+    addDevice() {
+      console.log("Add device");
+      this.devices.push(`Device name ${this.devices.length + 1}`);
+    },
+  },
+
+  watch: {
+    model () {
+      console.log(this.model);
+    }
+  },
 };
 </script>
