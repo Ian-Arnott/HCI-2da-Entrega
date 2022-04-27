@@ -18,6 +18,7 @@
 
     <v-main>
       <WelcomePage/>
+<!--      <HomePage/>-->
       <!-- <DeviceList/> -->
     </v-main>
   </v-app>
@@ -25,12 +26,14 @@
 
 <script>
 import WelcomePage from './components/WelcomePage';
+// import HomePage from "@/components/HomePage";
 // import DeviceList from './components/DeviceList';
 
 export default {
   name: 'App',
 
   components: {
+    // HomePage,
     WelcomePage,
     // DeviceList,
   },
