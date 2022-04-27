@@ -17,22 +17,22 @@
     </v-navigation-drawer>
 
     <v-main>
-      <WelcomePage/>
-      <!-- <DeviceList/> -->
+      <!-- <WelcomePage/> -->
+      <DeviceList/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import WelcomePage from './components/WelcomePage';
-// import DeviceList from './components/DeviceList';
+// import WelcomePage from './components/WelcomePage';
+import DeviceList from './components/DeviceList';
 
 export default {
   name: 'App',
 
   components: {
-    WelcomePage,
-    // DeviceList,
+    // WelcomePage,
+    DeviceList,
   },
 
   data(){
