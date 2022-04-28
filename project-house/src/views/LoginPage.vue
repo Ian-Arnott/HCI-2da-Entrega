@@ -21,7 +21,7 @@
 
       <!-- Email Form -->
       <v-col cols="12">
-        <v-form v-model="valid">
+        <v-form v-model="valid" @submit.prevent>
           <v-text-field
             v-model="email"
             :rules="emailRules"
@@ -29,15 +29,17 @@
             required
           ></v-text-field>
 
-          <v-btn
-            depressed
-            :disabled="!valid"
-            color="primary"
-            class="mr-4"
-            @click="validate"
-          >
-            GET STARTED
-          </v-btn>
+          <router-link to="/home">
+            <v-btn
+              depressed
+              :disabled="!valid"
+              color="primary"
+              class="mr-4"
+              @click="validate"
+            >
+              GET STARTED
+            </v-btn>
+          </router-link>
         </v-form>
       </v-col>
     </v-row>
@@ -46,7 +48,7 @@
 
 <script>
 export default {
-  name: "WelcomePage",
+  name: "LoginPage",
 
   data: () => ({
     valid: false,
@@ -61,6 +63,7 @@ export default {
     validate() {
       //TODO router
       console.log("email is: " + this.email);
+      this.isAuthenticated = true;
     },
   },
 };

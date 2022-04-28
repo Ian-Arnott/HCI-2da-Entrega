@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row class="text-center" align="center" justify="center">
-      <v-col cols="2">
+      <v-col cols="3">
         <h1>Devices</h1>
         <v-btn class="ma-4" fab dark small color="primary" @click="addDevice">
           <v-icon dark> mdi-plus </v-icon>
@@ -9,7 +9,7 @@
       </v-col>
 
       <!-- Lista de dispositivos -->
-      <v-col cols="10">
+      <v-col cols="9">
         <p v-show="devices.length == 0" >Empty list</p>
         <v-sheet class="mx-auto" max-width="800">
           <v-slide-group v-model="model" class="pa-4" multiple show-arrows>

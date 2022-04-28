@@ -7,14 +7,16 @@
       <RoutineList/>
     </v-container>
     <v-container id="RoomList">
-      <room-list/>
+      <RoomList/>
     </v-container>
   </v-container>
 </template>
+
 <script>
 import DeviceList from "@/components/DeviceList";
 import RoutineList from "@/components/RoutineList";
 import RoomList from "@/components/RoomList";
+
 export default {
   components: {RoomList, RoutineList, DeviceList}
 }
@@ -22,8 +24,9 @@ export default {
 
 <!-- color correcto a definir -->
 
-<style>
+<style scoped>
   #RoutineList {
     background-color: lightgray;
+    
   }
 </style>
