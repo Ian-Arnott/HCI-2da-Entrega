@@ -23,6 +23,13 @@ const routes = [
         name: 'Login',
         component: LoginPage
     },
+
+    // rutas dinamicas para devices, rooms y routines
+    {
+        path: '/rooms/:id',
+        name: 'RoomDetails',
+        component: () => import(/*room details*/"@/views/RoomDetails")
+    },
 ]
 
 const router = new VueRouter({
