@@ -16,19 +16,34 @@ const routes = [
     {
         path: '/home',
         name: 'Home',
-        component: HomePage
+        component: HomePage // home tab
     },
     {
         path: '/login',
         name: 'Login',
         component: LoginPage
     },
+    {
+        path: '/rooms',
+        name: 'Rooms',
+        component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
+    },
+    {
+        path: '/devices',
+        name: 'Devices',
+        component: () => import(/* webpackChunkName: "devices" */"@/views/DevicesPage")
+    },
 
     // rutas dinamicas para devices, rooms y routines
     {
         path: '/rooms/:id',
         name: 'RoomDetails',
-        component: () => import(/*room details*/"@/views/RoomDetails")
+        component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails")
+    },
+    {
+        path: '/devices/:id',
+        name: 'DeviceDetails',
+        component: () => import(/* webpackChunkName: "device-details" */"@/views/DeviceDetails")
     },
 ]
 

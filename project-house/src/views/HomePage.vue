@@ -1,32 +1,37 @@
 <template>
   <v-container>
-    <v-container id="DeviceList">
-      <DeviceList/>
-    </v-container>
-    <v-container id="RoutineList">
-      <RoutineList/>
-    </v-container>
-    <v-container id="RoomList">
-      <RoomList/>
-    </v-container>
+    <v-row class="text-center">
+      <v-col cols="12">
+        <v-img
+          :src="require('../assets/logo.svg')"
+          class="my-3"
+          contain
+          height="200"
+        />
+      </v-col>
+      <v-col class="mb-4">
+        <h1 class="display-2 font-weight-bold mb-3">Welcome {{ this.$route.params.username }}</h1>
+
+        <p class="subheading font-weight-regular">
+          Manage your appliances from anywhere
+        </p>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
-import DeviceList from "@/components/DeviceList";
-import RoutineList from "@/components/RoutineList";
-import RoomList from "@/components/RoomList";
-
 export default {
-  components: {RoomList, RoutineList, DeviceList}
-}
+  props: {
+    username: String,
+  }
+};
 </script>
 
 <!-- color correcto a definir -->
 
 <style scoped>
-  #RoutineList {
-    background-color: lightgray;
-    
-  }
+#RoutineList {
+  background-color: lightgray;
+}
 </style>

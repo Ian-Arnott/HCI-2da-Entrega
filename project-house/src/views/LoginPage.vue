@@ -29,7 +29,11 @@
             required
           ></v-text-field>
 
-          <router-link to="/home">
+          <router-link
+            class="text-decoration-none"
+            v-show="valid"
+            :to="{ name: 'Home', params: { username: email } }"
+          >
             <v-btn
               depressed
               :disabled="!valid"
