@@ -28,22 +28,12 @@ const routes = [
         name: 'Rooms',
         component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
     },
-    {
-        path: '/devices',
-        name: 'Devices',
-        component: () => import(/* webpackChunkName: "devices" */"@/views/DevicesPage")
-    },
 
-    // rutas dinamicas para devices, rooms y routines
+    // rutas dinamicas para rooms y routines
     {
         path: '/rooms/:id',
         name: 'RoomDetails',
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails")
-    },
-    {
-        path: '/devices/:id',
-        name: 'DeviceDetails',
-        component: () => import(/* webpackChunkName: "device-details" */"@/views/DeviceDetails")
     },
 ]
 
