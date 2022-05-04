@@ -29,21 +29,16 @@
             required
           ></v-text-field>
 
-          <router-link
-            class="text-decoration-none"
-            v-show="valid"
+          <v-btn
             :to="{ name: 'Home', params: { username: email } }"
+            depressed
+            :disabled="!valid"
+            color="primary"
+            class="mr-4"
+            @click="validate"
           >
-            <v-btn
-              depressed
-              :disabled="!valid"
-              color="primary"
-              class="mr-4"
-              @click="validate"
-            >
-              GET STARTED
-            </v-btn>
-          </router-link>
+            GET STARTED
+          </v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -65,7 +60,7 @@ export default {
 
   methods: {
     validate() {
-      //TODO router
+      //TODO validation
       console.log("email is: " + this.email);
       this.isAuthenticated = true;
     },
