@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: "RoomsTab",
+  name: "RoomsPage",
 
   components: {},
 
