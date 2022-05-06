@@ -27,11 +27,3 @@ export default {
   }
 };
 </script>
-
-<!-- color correcto a definir -->
-
-<style scoped>
-#RoutineList {
-  background-color: lightgray;
-}
-</style>

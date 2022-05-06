@@ -28,6 +28,11 @@ const routes = [
         name: 'Rooms',
         component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
     },
+    {
+        path: '/routines',
+        name: 'Routines',
+        component: () => import(/* webpackChunkName: "routines" */"@/views/RoutinesPage")
+    },
 
     // rutas dinamicas para rooms y routines
     {
