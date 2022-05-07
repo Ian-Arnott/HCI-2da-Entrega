@@ -24,52 +24,27 @@
 </template>
 
 <script>
+import api from "@/api/api.js";
+import store from "@/plugins/store.js";
+
 export default {
   name: "RoomsPage",
 
   components: {},
 
-  data() {
-    return {
-      rooms: [
-        {
-          name: "Misc",
-          devices: [
-            { name: "Device 1" },
-            { name: "Device 2" },
-            { name: "Device 3" },
-          ],
-          img: "kitchen.jpeg",
-        },
-        {
-          name: "Kitchen",
-          devices: [
-            { name: "Device 1" },
-            { name: "Device 2" },
-            { name: "Device 3" },
-          ],
-          img: "kitchen.jpeg",
-        },
-        {
-          name: "Bedroom",
-          devices: [
-            { name: "Device 1" },
-            { name: "Device 2" },
-            { name: "Device 3" },
-          ],
-          img: "bedroom.jpeg",
-        },
-        {
-          name: "Living Room",
-          devices: [
-            { name: "Device 1" },
-            { name: "Device 2" },
-            { name: "Device 3" },
-          ],
-          img: "living-room.jpg",
-        },
-      ],
-    };
+  // usamos metodos computados para acceder a las variables del store
+  computed: {
+    rooms() {
+      return store.state.rooms;
+    },
+  },
+
+  // este metodo se llama cuando se crea el componente, lo usamos para cargar datos
+  created() {
+    // llamo a la api para pedirle datos y luego los cargo en el store
+    api.getRooms((rooms) => {
+      store.commit("setRooms", rooms);
+    });
   },
 };
 </script>
