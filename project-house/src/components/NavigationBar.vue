@@ -12,9 +12,9 @@
       <!-- Tabs -->
       <template>
         <v-tabs centered v-show="tabs" align-with-title>
-          <v-tab :to="{ name: 'Home' }">Home</v-tab>
+          <!-- <v-tab :to="{ name: 'Home' }">Home</v-tab>
           <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
-          <v-tab :to="{ name: 'Routines' }">Routines</v-tab>
+          <v-tab :to="{ name: 'Routines' }">Routines</v-tab> -->
         </v-tabs>
       </template>
 

@@ -1,29 +1,24 @@
 <template>
-  <v-container class="text-center">
-    <!-- <h1 class="ma-4">Rooms Tab</h1> -->
-    <v-row justify="center" v-for="room in rooms" :key="room.name">
-      <v-container fluid>
-        <v-card
-          ripple
-          :to="{ name: 'RoomDetails', params: { id: room.name } }"
-          :img="require(`@/assets/rooms/${room.img}`)"
-        >
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
+        <v-card ripple :to="{ name: 'RoomDetails', params: { id: room.name } }">
+          <v-img
+            max-height="100px"
+            :src="require(`@/assets/rooms/${room.img}`)"
+            :alt="room.name"
+          />
+
+          <v-card-actions>
+            <v-btn absolute right @click.stop.prevent fab small>
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </v-card-actions>
+
           <v-card-title>{{ room.name }}</v-card-title>
-          <v-card-subtitle align="left">Room description</v-card-subtitle>
-
-          <!-- Device placeholder, cuando hacemos click luego hay que mostrar un pop up -->
-          <v-list id="list">
-            <v-list-item
-              v-for="device in room.devices"
-              :key="device.name"
-              :to="`/devices/${device.name}`" 
-              >{{ device.name }}</v-list-item
-            >
-          </v-list>
-          <!-- Device placeholder -->
-
+          <v-card-text align="left">14 devices 1 active</v-card-text>
         </v-card>
-      </v-container>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -37,6 +32,15 @@ export default {
   data() {
     return {
       rooms: [
+        {
+          name: "Misc",
+          devices: [
+            { name: "Device 1" },
+            { name: "Device 2" },
+            { name: "Device 3" },
+          ],
+          img: "kitchen.jpeg",
+        },
         {
           name: "Kitchen",
           devices: [

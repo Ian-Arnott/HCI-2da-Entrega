@@ -14,24 +14,26 @@ const routes = [
         redirect: '/login'
     },
     {
-        path: '/home',
+        path: '/',
         name: 'Home',
-        component: HomePage // home tab
+        component: HomePage,
+        children: [
+            {
+                path: 'rooms',
+                name: 'Rooms',
+                component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
+            },
+            {
+                path: 'routines',
+                name: 'Routines',
+                component: () => import(/* webpackChunkName: "routines" */"@/views/RoutinesPage")
+            },
+        ]
     },
     {
         path: '/login',
         name: 'Login',
         component: LoginPage
-    },
-    {
-        path: '/rooms',
-        name: 'Rooms',
-        component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
-    },
-    {
-        path: '/routines',
-        name: 'Routines',
-        component: () => import(/* webpackChunkName: "routines" */"@/views/RoutinesPage")
     },
 
     // rutas dinamicas para rooms y routines

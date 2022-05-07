@@ -10,20 +10,38 @@
         />
       </v-col>
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome {{ this.$route.params.username }}</h1>
+        <h1 class="display-2 font-weight-bold mb-3">Welcome Home</h1>
 
         <p class="subheading font-weight-regular">
-          Manage your appliances from anywhere
+          {{ username }}
         </p>
       </v-col>
-    </v-row>
+
+      <v-col cols="12">
+        <template>
+          <v-tabs centered>
+            <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
+            <v-tab :to="{ name: 'Routines' }">Routines</v-tab>
+          </v-tabs>
+        </template>
+      </v-col>
+      <v-col cols="12">
+        <router-view :key="$route.path"/>
+      </v-col>
+    </v-row>    
   </v-container>
 </template>
 
 <script>
 export default {
-  props: {
-    username: String,
+  // props: {
+  //   username: String,
+  // }
+
+  data() {
+    return {
+      username: "Username",
+    }
   }
 };
 </script>
