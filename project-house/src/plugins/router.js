@@ -7,12 +7,6 @@ import LoginPage from '../views/LoginPage.vue';
 Vue.use(VueRouter);
 
 const routes = [
-
-    // TODO encontrar la forma de redireccionar / a /home si ya esta logeado
-    {
-        path: '/',
-        redirect: '/login'
-    },
     {
         path: '/',
         name: 'Home',
@@ -49,6 +43,13 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+})
+
+const isAuthenticated = true;
+
+router.beforeEach((to, from, next) => {
+    if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+    else next()
 })
 
 export default router
