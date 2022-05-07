@@ -37,6 +37,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
         props: true
     },
+
+    // Default route (not found)
+    {
+        path: '/404',
+        alias: '*',
+        name: 'NotFound',
+        component: () => import(/* webpackChunkName: "404" */"@/views/404NotFound"),
+    }
 ]
 
 const router = new VueRouter({

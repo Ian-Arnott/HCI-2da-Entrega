@@ -3,9 +3,9 @@
     <NavigationBar />
 
     <v-main>
-      <v-container fluid>
+      <!-- <v-container fluid> -->
         <router-view :key="$route.path"/>
-      </v-container>
+      <!-- </v-container> -->
     </v-main>
   </v-app>
 </template>
