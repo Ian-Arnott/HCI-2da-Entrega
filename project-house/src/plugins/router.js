@@ -38,7 +38,8 @@ const routes = [
     {
         path: '/rooms/:id',
         name: 'RoomDetails',
-        component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails")
+        component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
+        props: true
     },
 ]
 
