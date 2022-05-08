@@ -2,15 +2,18 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card ripple :to="{ name: 'RoomDetails', params: { name: room.name } }">
+        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name } }"
+                @mouseenter="cardHovered = room.name"
+                @mouseleave="cardHovered = null">
           <v-img
             max-height="100px"
             :src="require(`@/assets/rooms/${room.img}`)"
             :alt="room.name"
           />
 
+          <!-- Show only if this card is being hovered -->
           <v-card-actions>
-            <v-btn absolute right @click.stop.prevent fab small>
+            <v-btn v-show="cardHovered === room.name" absolute right @click.stop.prevent fab small>
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </v-card-actions>
@@ -31,6 +34,12 @@ export default {
   name: "RoomsPage",
 
   components: {},
+
+  data() {
+    return {
+      cardHovered: null,
+    }
+  },
 
   // usamos metodos computados para acceder a las variables del store
   computed: {
