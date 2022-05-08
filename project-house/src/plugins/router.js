@@ -11,6 +11,7 @@ Vue.use(VueRouter);
 const routes = [
     {
         path: '/',
+        redirect: { name: 'Rooms' }, // default view
         name: 'Home',
         component: HomePage,
         children: [

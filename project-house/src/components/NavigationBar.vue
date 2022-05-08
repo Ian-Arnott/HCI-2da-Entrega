@@ -2,7 +2,7 @@
   <nav>
     <v-app-bar app color="primary" dark>
       <!-- Title -->
-      <router-link to="/">
+      <router-link :to="{name: 'Home'}">
         <v-toolbar-title class="text-uppercase white--text">
           <span>project</span>
           <span class="font-weight-light"> House</span>
