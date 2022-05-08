@@ -11,6 +11,9 @@ export default new Vuex.Store({
 
   // permite aplicar filtros a las colecciones de state
   getters: {
+    getRoomByName: (state) => (roomName) => {
+      return state.rooms.find(room => room.name == roomName);
+    }
   },
 
   // definimos metodos que modifican las variables de estado mediante store.commit("setValue", newValue)

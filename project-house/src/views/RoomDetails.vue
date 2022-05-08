@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1 class="text-center">Room Details {{ id }}</h1>
+    <h1 class="text-center">Room Details {{ name }}</h1>
   </v-container>
 </template>
 
@@ -9,7 +9,7 @@ export default {
   name: "RoomDetails",
 
   props: {
-    id: {
+    name: {
       type: String,
       required: true
     }

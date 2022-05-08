@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card ripple :to="{ name: 'RoomDetails', params: { id: room.name } }">
+        <v-card ripple :to="{ name: 'RoomDetails', params: { name: room.name } }">
           <v-img
             max-height="100px"
             :src="require(`@/assets/rooms/${room.img}`)"

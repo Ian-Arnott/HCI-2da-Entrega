@@ -4,6 +4,8 @@ import VueRouter from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginPage from '../views/LoginPage.vue';
 
+import store from '@/plugins/store.js';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -32,10 +34,17 @@ const routes = [
 
     // rutas dinamicas para rooms y routines
     {
-        path: '/rooms/:id',
+        path: '/rooms/:name',
         name: 'RoomDetails',
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
-        props: true
+        props: true,
+        beforeEnter: (to, from, next) => {
+            // const exists = store.state.rooms.find(room => room.name == to.params.name);  // Opcion 1
+            const exists = store.getters.getRoomByName(to.params.name);                     // Opcion 2
+
+            if (exists) next()
+            else next({ name: 'NotFound' })
+        }
     },
 
     // Default route (not found)
