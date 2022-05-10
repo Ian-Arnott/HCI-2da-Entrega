@@ -40,9 +40,7 @@ export default {
       type: String,
       required: true,
     },
-    room: {
-      required: true,
-    },
+    // room: {},
   },
 
   data() {
@@ -50,6 +48,9 @@ export default {
   },
 
   computed: {
+    room() {
+      return store.getters.getRoomByName(this.name)
+    },
     devices() {
       return store.getters.getDevicesByRoom(this.room);
     },

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name, room: room } }"
+        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name } }"
                 @mouseenter="cardHovered = room.name"
                 @mouseleave="cardHovered = null">
           <v-img
