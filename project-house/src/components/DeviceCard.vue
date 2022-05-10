@@ -14,9 +14,25 @@
     <v-card-text>{{ device.name }}</v-card-text>
 
     <v-card-actions v-show="hovered">
-      <v-btn icon absolute top right @click.stop>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      <v-menu auto v-model="menu">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-for="state in deviceType.states"
+            :key="state.id"
+            @click="setDeviceState(state.id)"
+          >
+            <!-- <v-list-item-content> -->
+            <v-list-item-title>{{ state.action }}</v-list-item-title>
+            <!-- </v-list-item-content> -->
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </v-card-actions>
   </v-card>
 </template>
@@ -34,6 +50,7 @@ export default {
   data() {
     return {
       hovered: false,
+      menu: false,
     };
   },
 
@@ -57,6 +74,33 @@ export default {
           var data = { deviceId: this.device.id, newState: newState };
           store.commit("setDeviceState", data);
           this.$emit("switched");
+        },
+        () => {
+          console.error("Api error");
+        }
+      );
+    },
+
+    setDeviceState(state) {
+      var oldState = this.device.state;
+      var newState = state;
+
+      if (oldState == newState) {
+        console.log('No hay cambio de estado');
+        return;
+      }
+
+      api.setDeviceState(
+        this.device.id,
+        newState,
+        () => {
+          var data = { deviceId: this.device.id, newState: newState };
+          store.commit("setDeviceState", data);
+
+          // si estaba apagado (0) y se prendio (>=1)
+          // si estaba prendido (>=1) y se apago (0)
+          if (oldState == 0 && newState >= 1 || oldState >= 1 && newState == 0) 
+            this.$emit("switched");
         },
         () => {
           console.error("Api error");

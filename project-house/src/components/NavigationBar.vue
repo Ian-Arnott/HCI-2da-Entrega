@@ -39,7 +39,7 @@
         <v-list>
           <v-subheader>Language</v-subheader>
           <v-list-item>English</v-list-item>
-          <v-list-item>Spanish</v-list-item>
+          <!-- <v-list-item disabled>Spanish</v-list-item> -->
         </v-list>
       </v-menu>
     </v-app-bar>

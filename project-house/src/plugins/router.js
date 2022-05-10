@@ -40,8 +40,13 @@ const routes = [
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
         props: true,
         beforeEnter: (to, from, next) => {
-            // const exists = store.state.rooms.find(room => room.name == to.params.name);  // Opcion 1
-            const exists = store.getters.getRoomByName(to.params.name);                     // Opcion 2
+            // Opcion 1 incorrecta - solo acceder al state directamente si no se desea filtrar o transformar la info
+            // const exists = store.state.rooms.find(room => room.name == to.params.name);
+
+            // Opcion 2 correcta
+            const exists = store.getters.getRoomByName(to.params.name);
+            
+            // console.log(from);
 
             if (exists) next()
             else next({ name: 'NotFound' })

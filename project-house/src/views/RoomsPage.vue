@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name } }"
+        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name, room: room } }"
                 @mouseenter="cardHovered = room.name"
                 @mouseleave="cardHovered = null">
           <v-img
@@ -19,7 +19,10 @@
           </v-card-actions>
 
           <v-card-title>{{ room.name }}</v-card-title>
-          <v-card-text align="left">14 devices 1 active</v-card-text>
+          <v-card-text align="left">{{ deviceCount(room) }} devices
+            <v-icon>mdi-circle-small</v-icon>
+            {{ activeDeviceCount(room) }} active
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
@@ -41,10 +44,20 @@ export default {
     }
   },
 
-  // usamos metodos computados para acceder a las variables del store
+  // usamos metodos o propiedades computadas para acceder a las variables del store
   computed: {
     rooms() {
       return store.state.rooms;
+    },    
+  },
+
+  methods: {
+    deviceCount(room) {
+      return store.getters.getDevicesByRoom(room).length;
+    },
+
+    activeDeviceCount(room) {
+      return store.getters.getActiveDevicesByRoom(room).length;
     },
   },
 
@@ -53,6 +66,10 @@ export default {
     // llamo a la api para pedirle datos y luego los cargo en el store
     api.getRooms((rooms) => {
       store.commit("setRooms", rooms);
+    });
+
+    api.getDevices((devices) => {
+      store.commit("setDevices", devices);
     });
   },
 };

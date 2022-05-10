@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       listHovered: false,
-      itemHovered: null,
       selected: [],
     };
   },
@@ -113,31 +112,6 @@ export default {
         // remove
         this.selected = this.selected.filter((id) => id != deviceId);
       } else this.selected.push(deviceId.toString());
-    },
-
-    changeDeviceState(device, state, toggle) {
-      var oldState = device.state;
-      var newState = state;
-
-      if (state === false) {
-        newState = 0;
-      } else if (state === true) {
-        newState = 1;
-      }
-
-      api.setDeviceState(
-        device.id,
-        newState,
-        () => {
-          var data = { deviceId: device.id, newState: newState };
-          store.commit("setDeviceState", data);
-          // toggle card
-          if (oldState <= 1 && newState <= 1 && oldState != newState) toggle();
-        },
-        () => {
-          console.error("Api error");
-        }
-      );
     },
   },
 

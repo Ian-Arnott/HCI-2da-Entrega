@@ -20,7 +20,8 @@
       <v-col cols="12">
         <template>
           <v-tabs centered>
-            <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
+            <!-- La pestaña deberia llamarse Devices o Rooms? -->
+            <v-tab :to="{ name: 'Rooms' }">Devices</v-tab>
             <v-tab :to="{ name: 'Routines' }">Routines</v-tab>
           </v-tabs>
         </template>
