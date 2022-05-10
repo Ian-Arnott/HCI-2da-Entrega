@@ -67,6 +67,8 @@ export default {
         .getDevicesByRoom(this.room)
         .filter((device) => device.type == this.deviceType.name);
     },
+
+    // propiedad computada que usa el switch para funcionar
     selectAll: {
       get() {
         return this.devices
@@ -88,15 +90,28 @@ export default {
 
         // llamada a api
         this.devices.forEach((device) => {
+          // no llamo al api en este caso
+          if (device.state == state) {
+            console.log("No hay cambio de estado " + device.name);
+            return;
+          }
+
           api.setDeviceState(
             device.id,
             state,
-            () => {
+            () => { // ok
               var data = { deviceId: device.id, newState: state };
               store.commit("setDeviceState", data);
             },
-            () => {
-              console.error("Api error");
+            () => { // error
+              console.error("Api error: " + device.name);
+              // sacar de lista
+              if (value) {
+                selected = selected.filter((id) => id != device.id);
+              } else {  // agregar a lista
+                selected.push(device.id.toString());
+              }
+              this.selected = selected;
             }
           );
         });

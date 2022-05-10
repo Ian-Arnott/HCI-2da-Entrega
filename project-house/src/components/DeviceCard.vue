@@ -56,9 +56,9 @@ export default {
 
   computed: {
     isActive() {
-      if (this.device.state > 0) {
-        console.log(`${this.device.name} active`);
-      }
+      // if (this.device.state > 0) {
+        console.log(`${this.device.name} ${this.device.state > 0 ? "active" : "inactive"}`);
+      // }
       return this.device.state > 0;
     },
   },
