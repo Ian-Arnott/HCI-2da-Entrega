@@ -10,39 +10,20 @@
     </template>
 
     <v-list>
-      <!-- Dialogs -->
-      <v-dialog v-for="(item, i) in items" :key="i" persistent v-model="item.opened" max-width="600px">
-
-        <!-- Activador del Dialog (item del menu) -->
-        <template v-slot:activator="{ on, attrs }">
-          <v-list-item v-bind="attrs" v-on="on" >
-            <v-icon class="mr-4" >{{ item.icon }}</v-icon>
-            <v-list-item-title>{{ item.title }} </v-list-item-title>
-          </v-list-item>
-        </template>
-
-        <!-- Contenido del Dialog (placeholder) -->
-        <v-card>
-          <v-card-title>
-            <span class="text-h5">{{ item.title }}</span>
-          </v-card-title>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="item.opened = false; menu = false">
-              Close
-            </v-btn>
-            <v-btn color="blue darken-1" text @click="item.opened = false; menu = false">
-              Save
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <AddDevice/>
+      <AddRoom/>
+      <AddRoutine/>
     </v-list>
   </v-menu>
 </template>
 
 <script>
+import AddDevice from './AddDevice.vue'
+import AddRoom from './AddRoom.vue'
+import AddRoutine from './AddRoutine.vue'
+
 export default {
+  components: { AddDevice, AddRoom, AddRoutine },
   name: "AddButton",
 
   data() {
@@ -51,9 +32,9 @@ export default {
       
       // menu items
       items: [
-        { title: "Add room", opened: false, icon: "mdi-bed" },
-        { title: "Add device", opened: false, icon: "mdi-lightbulb" },  // mdi-devices
-        { title: "Add routine", opened: false, icon: "mdi-timeline-text" }, // mdi-text-box
+        { title: "Add room", opened: false, icon: "mdi-bed", component: 'AddRoom' },
+        { title: "Add device", opened: false, icon: "mdi-lightbulb", component: 'AddDevice' },  // mdi-devices
+        { title: "Add routine", opened: false, icon: "mdi-timeline-text", component: 'AddRoutine' }, // mdi-text-box
       ],
     }
   }
