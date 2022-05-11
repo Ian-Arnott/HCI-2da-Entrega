@@ -14,7 +14,7 @@
     <v-card-text>{{ device.name }}</v-card-text>
 
     <v-card-actions v-show="hovered">
-      <v-tooltip bottom>
+      <v-tooltip top>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on" 
             :to="{name: 'DeviceDetails', params: {slug: device.name}}">

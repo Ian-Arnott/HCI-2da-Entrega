@@ -30,14 +30,10 @@
         <router-view :key="$route.path"/>
       </v-col>
     </v-row>    
-
-    <!-- FAB -->
-    <AddButton />
   </v-container>
 </template>
 
 <script>
-import AddButton from "@/components/AddButton.vue"
 
 export default {
   // props: {
@@ -45,7 +41,6 @@ export default {
   // }
 
   components: {
-    AddButton,
   },
 
   data() {
