@@ -17,7 +17,7 @@
       <v-tooltip top>
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on" 
-            :to="{name: 'DeviceDetails', params: {slug: device.name}}">
+            :to="{name: 'DeviceDetails', params: {slug: device.slug}}">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>

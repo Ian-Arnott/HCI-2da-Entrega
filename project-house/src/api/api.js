@@ -1,6 +1,7 @@
 const _rooms = [{
     id: 0,
     name: "All Devices",
+    slug: "all-devices",
     devices: [
         { name: "Device 1" },
         { name: "Device 2" },
@@ -11,6 +12,7 @@ const _rooms = [{
 {
     id: 1,
     name: "Kitchen",
+    slug: "kitchen",
     devices: [
         { name: "Device 1" },
         { name: "Device 2" },
@@ -21,6 +23,7 @@ const _rooms = [{
 {
     id: 2,
     name: "Bedroom",
+    slug: "bedroom",
     devices: [
         { name: "Device 1" },
         { name: "Device 2" },
@@ -31,6 +34,7 @@ const _rooms = [{
 {
     id: 3,
     name: "Living Room",
+    slug: "living-room",
     devices: [
         { name: "Device 1" },
         { name: "Device 2" },
@@ -45,6 +49,7 @@ const _devices = [
         id: 1,
         type: 'Lights',
         name: "Light 1",
+        slug: "light-1",
         room: 1,             // id del cuarto vinculado, 0 o undefined si ninguno
         state: 0,           // 0=inactive, 1=active, 2=..., depende del tipo
     },
@@ -52,6 +57,7 @@ const _devices = [
         id: 2,
         type: 'Lights',
         name: "Light 2",
+        slug: "light-2",
         room: 0,
         state: 1,
     },
@@ -59,6 +65,7 @@ const _devices = [
         id: 3,
         type: 'Lights',
         name: "Light 3",
+        slug: "light-3",
         state: 0,
     },
 
@@ -67,12 +74,14 @@ const _devices = [
         id: 4,
         type: 'Speakers',
         name: "Speaker 1",
+        slug: "speaker-1",
         state: 0
     },
     {
         id: 5,
         type: 'Speakers',
         name: "Speaker 2",
+        slug: "speaker-2",
         state: 1
     },
 
@@ -81,6 +90,7 @@ const _devices = [
         id: 6,
         type: 'Doors',
         name: "Door 1",
+        slug: "door-1",
         room: 1,
         state: 0
     },
@@ -88,6 +98,7 @@ const _devices = [
         id: 7,
         type: 'Doors',
         name: "Door 2",
+        slug: "door-2",
         room: 2,
         state: 1
     },
@@ -95,7 +106,8 @@ const _devices = [
     {
         id: 8,
         type: 'Doors',
-        name: "Door 2",
+        name: "Door 3",
+        slug: "door-3",
         room: 3,
         state: 1
     },
@@ -105,6 +117,7 @@ const _devices = [
         id: 9,
         type: 'Fridges',
         name: "Fridge 1",
+        slug: "fridge-1",
         room: 1,
         state: 0
     },
@@ -114,6 +127,7 @@ const _devices = [
         id: 10,
         type: 'AC',
         name: "AC 1",
+        slug: "ac-1",
         room: 3,
         state: 1,
     }
@@ -149,8 +163,8 @@ const _deviceTypes = [
             },
             {
                 id: 1,  // default active
-                name: "Turned on",
-                action: "Turn on",
+                name: "Playing",
+                action: "Play",
                 icon: "mdi-speaker",
             },
         ]
@@ -230,5 +244,10 @@ export default {
     setDeviceState(deviceID, state, okCallback, errorCallback) {
         _devices.find(device => device.id == deviceID).state = state;
         setTimeout(() => { Math.random() > 0.01 ? okCallback() : errorCallback() }, 100)
+    },
+
+    // helper
+    slugify(name) {
+        return name.trim().toLowerCase().replace(/\s\s+/g, '-');  
     }
 }

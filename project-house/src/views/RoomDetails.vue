@@ -2,7 +2,7 @@
   <v-container>
     <BackButton class="ml-4 pb-0"/>
     <v-container class="text-center pa-0">
-      <h1 class="display-1 ma-3">{{ name }}</h1>
+      <h1 class="display-1 ma-3">{{ room.name }}</h1>
       <p class="subheading font-weight-regular">
         {{ deviceCount }} devices<v-icon>mdi-circle-small</v-icon
         >{{ activeDeviceCount }} active
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import api from "@/api/api.js";
+// import api from "@/api/api.js";
 import store from "@/plugins/store";
 import DeviceList from "@/components/DeviceList";
 import BackButton from "../components/BackButton.vue";
@@ -36,11 +36,10 @@ export default {
   },
 
   props: {
-    name: {
+    slug: {
       type: String,
       required: true,
     },
-    // room: {},
   },
 
   data() {
@@ -49,7 +48,7 @@ export default {
 
   computed: {
     room() {
-      return store.getters.getRoomByName(this.name)
+      return store.getters.getRoomBySlug(this.slug)
     },
     devices() {
       return store.getters.getDevicesByRoom(this.room);
@@ -66,16 +65,6 @@ export default {
     activeDeviceCount() {
       return store.getters.getActiveDevicesByRoom(this.room).length;
     },
-  },
-
-  created() {
-    api.getDevices((devices) => {
-      store.commit("setDevices", devices);
-    });
-
-    api.getDeviceTypes((types) => {
-      store.commit("setDeviceTypes", types);
-    });
   },
 };
 </script>

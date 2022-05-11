@@ -16,7 +16,7 @@
     </v-list-item>
     <v-divider class="mb-2"></v-divider>
 
-    <p>{{ selected }}</p>
+    <!-- <p>{{ selected }}</p> -->
 
     <!-- <v-item-group v-model="selected" multiple> -->
     <v-container>

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card hover ripple :to="{ name: 'RoomDetails', params: { name: room.name } }"
+        <v-card hover ripple :to="{ name: 'RoomDetails', params: { slug: room.slug } }"
                 @mouseenter="cardHovered = room.name"
                 @mouseleave="cardHovered = null">
           <v-img
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import api from "@/api/api.js";
 import store from "@/plugins/store.js";
 
 export default {
@@ -59,18 +58,6 @@ export default {
     activeDeviceCount(room) {
       return store.getters.getActiveDevicesByRoom(room).length;
     },
-  },
-
-  // este metodo se llama cuando se crea el componente, lo usamos para cargar datos
-  created() {
-    // llamo a la api para pedirle datos y luego los cargo en el store
-    api.getRooms((rooms) => {
-      store.commit("setRooms", rooms);
-    });
-
-    api.getDevices((devices) => {
-      store.commit("setDevices", devices);
-    });
   },
 };
 </script>

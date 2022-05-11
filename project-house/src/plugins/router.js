@@ -5,6 +5,7 @@ import HomePage from '../views/HomePage.vue';
 import LoginPage from '../views/LoginPage.vue';
 
 import store from '@/plugins/store.js';
+import api from '@/api/api';
 
 Vue.use(VueRouter);
 
@@ -35,21 +36,21 @@ const routes = [
 
     // rutas dinamicas para rooms y routines
     {
-        path: '/rooms/:name',
+        path: '/rooms/:slug',
         name: 'RoomDetails',
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
         props: true,
         beforeEnter: (to, from, next) => {
-            // Opcion 1 incorrecta - solo acceder al state directamente si no se desea filtrar o transformar la info
-            // const exists = store.state.rooms.find(room => room.name == to.params.name);
 
-            // Opcion 2 correcta
-            const exists = store.getters.getRoomByName(to.params.name);
+            // hay que llamar a la api y setear el store de nuevo porque cuando 
+            // se refreshea la pagina (f5) se pierde el estado
+            api.getRooms((rooms) => {
+                store.commit("setRooms", rooms)
+                const exists = store.getters.getRoomBySlug(api.slugify(to.params.slug));
 
-            // console.log(from);
-
-            if (exists) next()
-            else next({ name: 'NotFound' })
+                if (exists) next()
+                else next({ name: 'NotFound' })
+            })
         }
     },
 
@@ -58,6 +59,16 @@ const routes = [
         name: 'DeviceDetails',
         component: () => import(/* webpackChunkName: "device-details" */"@/views/DeviceDetails"),
         props: true,
+        beforeEnter: (to, from, next) => {
+
+            api.getDevices((devices) => {
+                store.commit("setDevices", devices)
+                const exists = store.getters.getDeviceBySlug(api.slugify(to.params.slug));
+        
+                if (exists) next()
+                else next({ name: 'NotFound' })
+            })
+        }
     },
 
     // Default route (not found)

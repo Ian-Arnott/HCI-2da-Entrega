@@ -14,8 +14,11 @@ export default new Vuex.Store({
 
   // permite aplicar filtros a las colecciones de state
   getters: {
-    getRoomByName: (state) => (roomName) => {
-      return state.rooms.find(room => room.name == roomName);
+    getRoomBySlug: (state) => (slug) => {
+      return state.rooms.find(room => room.slug == slug);
+    },
+    getDeviceBySlug: (state) => (slug) => {
+      return state.devices.find(device => device.slug == slug);
     },
     getDevicesByRoom: (state) => (room) => {
       if (room && room.id != 0) {
