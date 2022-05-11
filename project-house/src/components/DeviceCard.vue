@@ -14,25 +14,15 @@
     <v-card-text>{{ device.name }}</v-card-text>
 
     <v-card-actions v-show="hovered">
-      <v-menu auto v-model="menu">
+      <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on">
+          <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on" 
+            :to="{name: 'DeviceDetails', params: {slug: device.name}}">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-
-        <v-list>
-          <v-list-item
-            v-for="state in deviceType.states"
-            :key="state.id"
-            @click="setDeviceState(state.id)"
-          >
-            <!-- <v-list-item-content> -->
-            <v-list-item-title>{{ state.action }}</v-list-item-title>
-            <!-- </v-list-item-content> -->
-          </v-list-item>
-        </v-list>
-      </v-menu>
+        <span>More</span>
+      </v-tooltip>
     </v-card-actions>
   </v-card>
 </template>

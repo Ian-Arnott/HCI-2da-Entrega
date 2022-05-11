@@ -45,12 +45,19 @@ const routes = [
 
             // Opcion 2 correcta
             const exists = store.getters.getRoomByName(to.params.name);
-            
+
             // console.log(from);
 
             if (exists) next()
             else next({ name: 'NotFound' })
         }
+    },
+
+    {
+        path: '/devices/:slug',
+        name: 'DeviceDetails',
+        component: () => import(/* webpackChunkName: "device-details" */"@/views/DeviceDetails"),
+        props: true,
     },
 
     // Default route (not found)
