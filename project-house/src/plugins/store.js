@@ -17,8 +17,14 @@ export default new Vuex.Store({
     getRoomBySlug: (state) => (slug) => {
       return state.rooms.find(room => room.slug == slug);
     },
-    getDeviceBySlug: (state) => (slug) => {
-      return state.devices.find(device => device.slug == slug);
+    getRoomById: (state) => (roomId) => {
+      return state.rooms.find(room => room.id == roomId);
+    },
+    getRoomByName: (state) => (roomName) => {
+      return state.rooms.find(room => room.name == roomName);
+    },
+    getDeviceById: (state) => (deviceId) => {
+      return state.devices.find(device => device.id == deviceId);
     },
     getDevicesByRoom: (state) => (room) => {
       if (room && room.id != 0) {
@@ -53,6 +59,14 @@ export default new Vuex.Store({
     },
     setDeviceState(state, { deviceId, newState }) {
       state.devices.find(device => device.id == deviceId).state = newState;
+    },
+    editDevice(state, { deviceId, deviceName, roomId }) {
+      var device = state.devices.find(device => device.id == deviceId);
+      device.name = deviceName;
+      device.room = roomId;
+    },
+    deleteDevice(state, deviceId) {
+      state.devices = state.devices.filter(device => device.id != deviceId);
     }
   },
   actions: {

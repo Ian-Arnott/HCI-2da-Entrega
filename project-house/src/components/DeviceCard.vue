@@ -8,30 +8,25 @@
     @mouseleave="hovered = false"
     @click="switchDeviceState()"
   >
+    <!-- More options -->
+    <span absolute top right v-show="hovered">
+      <DeviceDetails :deviceId="device.id.toString()"/>    
+    </span>
+    
     <v-icon class="pt-2" x-large>{{
       isActive ? deviceType.states[1].icon : deviceType.states[0].icon
     }}</v-icon>
     <v-card-text>{{ device.name }}</v-card-text>
-
-    <v-card-actions v-show="hovered">
-      <v-tooltip top>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn icon absolute top right @click.stop v-bind="attrs" v-on="on" 
-            :to="{name: 'DeviceDetails', params: {slug: device.slug}}">
-            <v-icon>mdi-dots-vertical</v-icon>
-          </v-btn>
-        </template>
-        <span>More</span>
-      </v-tooltip>
-    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import api from "@/api/api.js";
 import store from "@/plugins/store";
+import DeviceDetails from "@/components/DeviceDetails.vue";
 
 export default {
+  components: { DeviceDetails },
   props: {
     device: {},
     deviceType: {},
@@ -40,7 +35,6 @@ export default {
   data() {
     return {
       hovered: false,
-      menu: false,
     };
   },
 

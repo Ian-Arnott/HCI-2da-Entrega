@@ -54,23 +54,6 @@ const routes = [
         }
     },
 
-    {
-        path: '/devices/:slug',
-        name: 'DeviceDetails',
-        component: () => import(/* webpackChunkName: "device-details" */"@/views/DeviceDetails"),
-        props: true,
-        beforeEnter: (to, from, next) => {
-
-            api.getDevices((devices) => {
-                store.commit("setDevices", devices)
-                const exists = store.getters.getDeviceBySlug(api.slugify(to.params.slug));
-        
-                if (exists) next()
-                else next({ name: 'NotFound' })
-            })
-        }
-    },
-
     // Default route (not found)
     {
         path: '/404',
