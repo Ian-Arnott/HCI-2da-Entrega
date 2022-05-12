@@ -1,14 +1,18 @@
 <template>
   <v-card
-    hover
-    ripple
-    @click="executeRoutine()"
-    @mouseenter="routineHovered = true"
-    @mouseleave="routineHovered = false"
+      hover
+      shaped
+      padless color="#C3F1A1"
+      ripple
+      @click="executeRoutine()"
+      @mouseenter="routineHovered = true"
+      @mouseleave="routineHovered = false"
+      max-width="300"
+      max-height="300"
   >
     <v-card-title>{{ routine }}</v-card-title>
-    <v-card-text>Action 1</v-card-text>
-    <v-card-text>Action 1</v-card-text>
+    <v-card-text align="left">Action 1</v-card-text>
+    <v-card-text align="left">Action 1</v-card-text>
     <v-card-actions v-show="routineHovered">
       <v-menu>
         <template v-slot:activator="{ on }">
