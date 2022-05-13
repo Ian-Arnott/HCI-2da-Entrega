@@ -19,6 +19,9 @@
             <v-col>
               <v-text-field label="New room name*" required></v-text-field>
             </v-col>
+            <v-col>
+              <v-select :items="type" item-text="name" label="Room type" required></v-select>
+            </v-col>
           </v-row>
       </v-container>
       <v-card-actions>
@@ -34,13 +37,11 @@
 export default {
   data() {
     return {
-      select: { state: "Oven" },
-      items: [
-        { state: "Speaker" },
-        { state: "Light" },
-        { state: "Oven" },
-        { state: "Alarm" },
-        { state: "Air Conditioning" },
+      type: [
+        { name: "kitchen" },
+        { name: "bedroom" },
+        { name: "living room" },
+        { name: "other" },
       ],
       opened: false,
       title: "Add room", 
