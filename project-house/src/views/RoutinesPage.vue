@@ -8,7 +8,7 @@
         </v-col>
       </v-container>
 
-      <v-col cols="auto" md="2" v-for="routine in routines" :key="routine.id">
+      <v-col cols="auto" md="4" v-for="routine in routines" :key="routine.id">
         <RoutineCard :routine="routine"/>
       </v-col>
     </v-row>

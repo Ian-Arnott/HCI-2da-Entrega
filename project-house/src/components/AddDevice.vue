@@ -25,13 +25,11 @@
             <v-col>
               <v-select
               lable="Device type"
-              required
               ></v-select>
             </v-col>
             <v-col>
               <v-select
               lable="Select room"
-              required
               ></v-select>
             </v-col>              
           </v-row>

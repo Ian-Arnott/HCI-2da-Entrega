@@ -7,7 +7,6 @@
       @click="executeRoutine()"
       @mouseenter="routineHovered = true"
       @mouseleave="routineHovered = false"
-      max-width="300px"
       max-height="300"
   >
     <v-card-title>{{ routine }}</v-card-title>
