@@ -14,10 +14,33 @@
       <v-card-title>
         <span class="text-h5">{{title}}</span>
       </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-text-field label="New device name*" required></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-select
+              lable="Device type"
+              required
+              ></v-select>
+            </v-col>
+            <v-col>
+              <v-select
+              lable="Select room"
+              required
+              ></v-select>
+            </v-col>              
+          </v-row>
+        </v-container>
+      </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="opened = false"> Close </v-btn>
-        <v-btn text @click="opened = false"> Save </v-btn>
+        <v-btn text @click="opened = false"> Cancel </v-btn>
+        <v-btn color="primary" @click="opened = false"> Add New Device </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -36,7 +59,7 @@ export default {
         { state: "Air Conditioning" },
       ],
       opened: false,
-      title: "Add device", 
+      title: "Add Device", 
       icon: "mdi-lightbulb", 
     };
   },

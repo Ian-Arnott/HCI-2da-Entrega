@@ -1,13 +1,13 @@
 <template>
   <v-card
       hover
-      shaped
+      rounded="xl"
       padless color="#C3F1A1"
       ripple
       @click="executeRoutine()"
       @mouseenter="routineHovered = true"
       @mouseleave="routineHovered = false"
-      max-width="300"
+      max-width="300px"
       max-height="300"
   >
     <v-card-title>{{ routine }}</v-card-title>

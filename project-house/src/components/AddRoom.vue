@@ -14,10 +14,17 @@
       <v-card-title>
         <span class="text-h5">{{title}}</span>
       </v-card-title>
+      <v-container>
+          <v-row>
+            <v-col>
+              <v-text-field label="New room name*" required></v-text-field>
+            </v-col>
+          </v-row>
+      </v-container>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="opened = false"> Close </v-btn>
-        <v-btn text @click="opened = false"> Save </v-btn>
+        <v-btn color="primary" @click="opened = false"> Add New Room </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
