@@ -14,7 +14,7 @@
       <v-card-title>
         <span class="text-h5">{{ title }}</span>
       </v-card-title>
-      <v-container>
+      <v-card-text>
         <v-form v-model="valid" @submit.prevent>
           <v-row>
             <v-col>
@@ -37,7 +37,7 @@
             </v-col>
           </v-row>
         </v-form>
-      </v-container>
+      </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="closeDialog()"> Close </v-btn>
