@@ -4,8 +4,7 @@ import VueRouter from 'vue-router';
 import HomePage from '../views/HomePage.vue';
 import LoginPage from '../views/LoginPage.vue';
 
-import store from '@/plugins/store.js';
-import api from '@/api/api';
+import store from "@/store/store"
 
 Vue.use(VueRouter);
 
@@ -44,9 +43,8 @@ const routes = [
 
             // hay que llamar a la api y setear el store de nuevo porque cuando 
             // se refreshea la pagina (f5) se pierde el estado
-            api.getRooms((rooms) => {
-                store.commit("setRooms", rooms)
-                const exists = store.getters.getRoomBySlug(api.slugify(to.params.slug));
+            store.dispatch('rooms/getAll').then(() => {
+                const exists = store.getters['rooms/getRoomByName'](to.params.slug);
 
                 if (exists) next()
                 else next({ name: 'NotFound' })

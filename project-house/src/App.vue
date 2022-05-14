@@ -15,18 +15,35 @@
 import AddButton from "@/components/AddButton.vue";
 import NavigationBar from "@/components/NavigationBar";
 import api from "@/api/api.js";
-import store from "@/plugins/store.js";
+import store from "@/store/store.js";
+
+import { mapActions } from "vuex";
+
 export default {
   name: "App",
+
   components: {
     AddButton,
     NavigationBar,
   },
+
+  methods: {
+    ...mapActions("rooms", {
+      $getAllRooms: "getAll",
+    }),
+    async getAllRooms() {
+      try {
+        await this.$getAllRooms();
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+  
   // este metodo se llama cuando se crea el componente, lo usamos para cargar datos
-  created() {
-    api.getRooms((rooms) => {
-      store.commit("setRooms", rooms);
-    });
+  async created() {
+    await this.getAllRooms();
+    
     api.getDevices((devices) => {
       store.commit("setDevices", devices);
     });

@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <BackButton class="ml-4 pb-0"/>
+    <BackButton class="ml-4 pb-0" />
     <v-container class="text-center pa-0">
       <h1 class="display-1 ma-3">{{ room.name }}</h1>
       <p class="subheading font-weight-regular">
-        {{ deviceCount }} devices<v-icon>mdi-circle-small</v-icon
-        >{{ activeDeviceCount }} active
+        {{ room.meta.deviceCount }} devices<v-icon>mdi-circle-small</v-icon
+        >{{ room.meta.activeDeviceCount }} active
       </p>
     </v-container>
 
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-// import api from "@/api/api.js";
-import store from "@/plugins/store";
+// import rooms from "@/store/modules/rooms"
+import { mapState, mapGetters } from "vuex"
 import DeviceList from "@/components/DeviceList";
 import BackButton from "../components/BackButton.vue";
 
@@ -47,24 +47,19 @@ export default {
   },
 
   computed: {
+    ...mapState("rooms", {
+      rooms: (state) => state.rooms
+    }),
+    ...mapGetters("rooms", {
+      getRoomByName: "getRoomByName",
+    }),
     room() {
-      return store.getters.getRoomBySlug(this.slug)
-    },
-    devices() {
-      return store.getters.getDevicesByRoom(this.room);
-    },
-
-    deviceTypes() {
-      return store.state.deviceTypes;
-    },
-
-    deviceCount() {
-      return store.getters.getDevicesByRoom(this.room).length;
-    },
-
-    activeDeviceCount() {
-      return store.getters.getActiveDevicesByRoom(this.room).length;
+      return this.getRoomByName(this.slug)
     },
   },
+  created() {
+    // TODO get device types
+    // return store.state.deviceTypes;
+  }
 };
 </script>

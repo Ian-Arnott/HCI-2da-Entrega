@@ -22,7 +22,7 @@
 
 <script>
 import api from "@/api/api.js";
-import store from "@/plugins/store";
+import store from "@/store/store";
 import DeviceDetails from "@/components/DeviceDetails.vue";
 
 export default {

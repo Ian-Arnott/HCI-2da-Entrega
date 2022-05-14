@@ -63,7 +63,7 @@
 
 <script>
 // import api from "@/api/api.js";
-import store from "@/plugins/store.js";
+import store from "@/store/store.js";
 
 export default {
   components: {},

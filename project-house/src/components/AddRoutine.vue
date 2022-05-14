@@ -49,7 +49,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="opened = false"> Close </v-btn>
-        <v-btn text @click="opened = false"> Create New Routine </v-btn>
+        <v-btn text @click="opened = false"> Create </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -63,7 +63,7 @@ export default {
       items: [
       ],
       opened: false,
-      title: "Create New Routine", 
+      title: "Create Routine", 
       icon: "mdi-timeline-text", 
     };
   },

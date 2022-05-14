@@ -36,7 +36,7 @@
 
 <script>
 import api from "@/api/api.js";
-import store from "@/plugins/store";
+import store from "@/store/store";
 
 import DeviceCard from "@/components/DeviceCard.vue";
 

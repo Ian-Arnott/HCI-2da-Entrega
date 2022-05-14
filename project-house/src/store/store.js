@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import rooms from "./modules/rooms"
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   // variables de estado compartidas en toda la aplicacion
   state: {
-    rooms: [],
     devices: [],
     routines: [],
     deviceTypes: []
@@ -14,15 +15,6 @@ export default new Vuex.Store({
 
   // permite aplicar filtros a las colecciones de state
   getters: {
-    getRoomBySlug: (state) => (slug) => {
-      return state.rooms.find(room => room.slug == slug);
-    },
-    getRoomById: (state) => (roomId) => {
-      return state.rooms.find(room => room.id == roomId);
-    },
-    getRoomByName: (state) => (roomName) => {
-      return state.rooms.find(room => room.name == roomName);
-    },
     getDeviceById: (state) => (deviceId) => {
       return state.devices.find(device => device.id == deviceId);
     },
@@ -48,9 +40,6 @@ export default new Vuex.Store({
 
   // definimos metodos que modifican las variables de estado mediante store.commit("setValue", newValue)
   mutations: {
-    setRooms(state, rooms) {
-      state.rooms = rooms
-    },
     setDevices(state, devices) {
       state.devices = devices
     },
@@ -69,8 +58,8 @@ export default new Vuex.Store({
       state.devices = state.devices.filter(device => device.id != deviceId);
     }
   },
-  actions: {
-  },
+
   modules: {
+    rooms,
   }
 })

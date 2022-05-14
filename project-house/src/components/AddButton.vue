@@ -10,9 +10,9 @@
     </template>
 
     <v-list>
-      <AddDevice/>
-      <AddRoom/>
-      <AddRoutine/>
+      <AddDevice @dialogClosed="menu = false"/>
+      <AddRoom @dialogClosed="menu = false"/>
+      <AddRoutine @dialogClosed="menu = false"/>
     </v-list>
   </v-menu>
 </template>

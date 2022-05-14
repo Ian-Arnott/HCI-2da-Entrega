@@ -21,7 +21,7 @@
         <template>
           <v-tabs centered>
             <!-- La pestaña deberia llamarse Devices o Rooms? -->
-            <v-tab :to="{ name: 'Rooms' }">Devices</v-tab>
+            <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
             <v-tab :to="{ name: 'Routines' }">Routines</v-tab>
           </v-tabs>
         </template>

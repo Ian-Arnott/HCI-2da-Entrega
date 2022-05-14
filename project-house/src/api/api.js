@@ -1,47 +1,10 @@
-const _rooms = [{
-    id: 0,
-    name: "All Devices",
-    slug: "all-devices",
-    devices: [
-        { name: "Device 1" },
-        { name: "Device 2" },
-        { name: "Device 3" },
-    ],
-    img: "kitchen.jpeg",
-},
-{
-    id: 1,
-    name: "Kitchen",
-    slug: "kitchen",
-    devices: [
-        { name: "Device 1" },
-        { name: "Device 2" },
-        { name: "Device 3" },
-    ],
-    img: "kitchen.jpeg",
-},
-{
-    id: 2,
-    name: "Bedroom",
-    slug: "bedroom",
-    devices: [
-        { name: "Device 1" },
-        { name: "Device 2" },
-        { name: "Device 3" },
-    ],
-    img: "bedroom.jpeg",
-},
-{
-    id: 3,
-    name: "Living Room",
-    slug: "living-room",
-    devices: [
-        { name: "Device 1" },
-        { name: "Device 2" },
-        { name: "Device 3" },
-    ],
-    img: "living-room.jpg",
-},]
+// const _rooms = [{
+//     id: 12345,
+//     name: "Kitchen",
+//     meta: {
+//         img: "kitchen.jpeg",
+//     }
+// }]
 
 const _devices = [
     // Lights
@@ -224,15 +187,10 @@ const _deviceTypes = [
 
 // copias
 
-const rooms = JSON.parse(JSON.stringify(_rooms));
 const devices = JSON.parse(JSON.stringify(_devices));
 const deviceTypes = JSON.parse(JSON.stringify(_deviceTypes));
 
 export default {
-    getRooms(okCallback) {
-        setTimeout(() => okCallback(rooms), 100) // simulacion de llamada a api
-    },
-
     getDevices(okCallback) {
         setTimeout(() => okCallback(devices), 100)
     },
@@ -248,6 +206,71 @@ export default {
 
     // helper
     slugify(name) {
-        return name.trim().toLowerCase().replace(/\s\s+/g, '-');  
+        return name.trim().toLowerCase().replace(/\s\s+/g, '-');
     }
 }
+
+class Api {
+    static get baseUrl() {
+        return "http://localhost:8080/api"  // grupo 4 puerto 8084
+    }
+
+    static get timeout() {
+        return 60 * 1000;
+    }
+
+    static async fetch(url, init) {
+        const controller = new AbortController()
+        init.signal = controller.signal
+
+        const timer = setTimeout(() => controller.abort(), Api.timeout)
+
+        try {
+            const response = await fetch(url, init)
+            const text = await response.text()
+            const json = text ? JSON.parse(text) : {}
+
+            // el api retorna un objeto error o result como base
+            if (json.error) throw json.error
+            return json.result
+        } catch (error) {
+            if (error.name === "AbortError") // error de fetch
+                throw { code: 100, description: [error.message.toLowerCase()] }
+            else if (error.name == "TypeError")
+                throw { code: 101, description: [error.message.toLowerCase()] };
+            throw error // error de api
+        } finally {
+            clearTimeout(timer)
+        }
+    }
+
+    static async get(url) {
+        return await Api.fetch(url, {})
+    }
+
+    static async post(url, data) {
+        return await Api.fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+    }
+
+    static async put(url, data) {
+        return await Api.fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(data)
+        })
+    }
+
+    static async delete(url) {
+        return await Api.fetch(url, { method: "DELETE" })
+    }
+}
+
+export { Api }
