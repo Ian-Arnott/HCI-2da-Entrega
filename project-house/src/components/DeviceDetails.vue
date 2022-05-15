@@ -62,15 +62,12 @@
 </template>
 
 <script>
-// import api from "@/api/api.js";
-import store from "@/store/store.js";
-
+import { mapActions, mapGetters, mapState } from 'vuex';
 export default {
   components: {},
 
   props: {
-    deviceId: {
-      type: String,
+    device: {
       required: true,
     },
   },
@@ -86,52 +83,57 @@ export default {
   },
 
   computed: {
-    device() {
-      return store.getters.getDeviceById(this.deviceId);
-    },
     roomName() {
-      var device = store.getters.getDeviceById(this.deviceId);
-      if (device.room && device.room > 0)
-        return store.getters.getRoomById(device.room).name;
-      else return "Not linked to any room";
+      let roomName = "Not linked to any room"
+      console.log(this.device)
+      if (this.device.room) roomName = this.device.room.name
+      return roomName
     },
-    rooms() {
-      return store.state.rooms;
-    },
+    ...mapState("rooms", {
+      rooms: (state) => state.rooms,
+    }),
   },
 
   methods: {
     changed() {
       return this.roomPicked != null || this.newDeviceName != null;
     },
-    save() {
+    ...mapGetters("rooms", {
+      getRoomByName: "getRoomByName",
+    }),
+    ...mapActions("devices", {
+      editDevice: "edit",
+      $deleteDevice: "delete",
+    }),
+    async save() {
       this.isEditing = !this.isEditing;
       this.hasSaved = true;
 
-      var roomId;
+      let roomId;
       if (this.roomPicked == null) {
         // no se cambio el room pero si el device name
         roomId = this.device.room;
       } else {
-        roomId = store.getters.getRoomByName(this.roomPicked).id;
+        roomId = this.getRoomByName(this.roomPicked).id;
       }
 
-      var data = {
+      let data = {
         deviceId: this.device.id,
         deviceName:
           this.newDeviceName == null ? this.device.name : this.newDeviceName,
         roomId: roomId,
       };
 
-      // falta api call antes de llamar al store
+      // TODO crear un device nuevo y pasarle eso
+      // ver que llamadas hacer dependiendo si se cambio el cuarto o solo el name
       console.log(data);
-      store.commit("editDevice", data);
+      await this.editDevice(this.device)
       this.menu = false
     },
 
-    deleteDevice() {
-      // Falta pedir confirmacion
-      store.commit("deleteDevice", this.deviceId);
+    async deleteDevice() {
+      // TODO Falta pedir confirmacion
+      await this.$deleteDevice(this.device.id)
       console.log("Device deleted");
       this.menu = false
     },

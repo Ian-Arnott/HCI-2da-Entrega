@@ -10,19 +10,15 @@
   >
     <!-- More options -->
     <span absolute top right v-show="hovered">
-      <DeviceDetails :deviceId="device.id.toString()"/>    
+      <DeviceDetails :device="device"/>    
     </span>
     
-    <v-icon class="pt-2" x-large>{{
-      isActive ? deviceType.states[1].icon : deviceType.states[0].icon
-    }}</v-icon>
+    <v-icon class="pt-2" x-large>{{ icon }}</v-icon>
     <v-card-text>{{ device.name }}</v-card-text>
   </v-card>
 </template>
 
 <script>
-import api from "@/api/api.js";
-import store from "@/store/store";
 import DeviceDetails from "@/components/DeviceDetails.vue";
 
 export default {
@@ -35,34 +31,61 @@ export default {
   data() {
     return {
       hovered: false,
+      icons: [
+        {
+          name: "Lamps",
+          icons: [
+            { status: "off", icon: "mdi-lightbulb-off" },
+            { status: "on", icon: "mdi-lightbulb-on" }
+          ]
+        },
+        {
+          name: "Speakers",
+          icons: [
+            { status: "stopped", icon: "mdi-speaker-off" },
+            { status: "playing", icon: "mdi-speaker-on" }
+          ]
+        },
+        {
+          name: "Alarms",
+          icons: [
+
+          ]
+        }
+      ]
     };
   },
 
   computed: {
     isActive() {
-      // if (this.device.state > 0) {
-        console.log(`${this.device.name} ${this.device.state > 0 ? "active" : "inactive"}`);
-      // }
-      return this.device.state > 0;
+      console.log(`${this.device.name}: ${this.device.state.status}`);
+      const inactiveStates = ['off', 'stopped']
+      return !inactiveStates.includes(this.device.state.status);
     },
+    icon() {
+      const type = this.icons.find(type => type.name == this.deviceType.name);
+      return type.icons.find(icon => icon.status == this.device.state.status).icon
+    }
   },
 
   methods: {
     switchDeviceState() {
-      var newState = this.device.state > 0 ? 0 : 1;
+      const newState = this.device.state > 0 ? 0 : 1;
+      
+      console.log(newState)
 
-      api.setDeviceState(
-        this.device.id,
-        newState,
-        () => {
-          var data = { deviceId: this.device.id, newState: newState };
-          store.commit("setDeviceState", data);
-          this.$emit("switched");
-        },
-        () => {
-          console.error("Api error");
-        }
-      );
+      // api.setDeviceState(
+      //   this.device.id,
+      //   newState,
+      //   () => {
+      //     var data = { deviceId: this.device.id, newState: newState };
+      //     store.commit("setDeviceState", data);
+      //     this.$emit("switched");
+      //   },
+      //   () => {
+      //     console.error("Api error");
+      //   }
+      // );
     },
 
     setDeviceState(state) {
@@ -74,22 +97,22 @@ export default {
         return;
       }
 
-      api.setDeviceState(
-        this.device.id,
-        newState,
-        () => {
-          var data = { deviceId: this.device.id, newState: newState };
-          store.commit("setDeviceState", data);
+      // api.setDeviceState(
+      //   this.device.id,
+      //   newState,
+      //   () => {
+      //     var data = { deviceId: this.device.id, newState: newState };
+      //     store.commit("setDeviceState", data);
 
-          // si estaba apagado (0) y se prendio (>=1)
-          // si estaba prendido (>=1) y se apago (0)
-          if (oldState == 0 && newState >= 1 || oldState >= 1 && newState == 0) 
-            this.$emit("switched");
-        },
-        () => {
-          console.error("Api error");
-        }
-      );
+      //     // si estaba apagado (0) y se prendio (>=1)
+      //     // si estaba prendido (>=1) y se apago (0)
+      //     if (oldState == 0 && newState >= 1 || oldState >= 1 && newState == 0) 
+      //       this.$emit("switched");
+      //   },
+      //   () => {
+      //     console.error("Api error");
+      //   }
+      // );
     },
   },
 };

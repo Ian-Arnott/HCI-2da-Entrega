@@ -27,6 +27,7 @@
             :deviceType="deviceType"
             @switched="toggleSelected(device.id)"
           />
+          <!-- <p>{{ device }}</p> -->
         </v-col>
       </v-row>
     </v-container>
@@ -35,10 +36,8 @@
 </template>
 
 <script>
-import api from "@/api/api.js";
-import store from "@/store/store";
-
 import DeviceCard from "@/components/DeviceCard.vue";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -62,10 +61,12 @@ export default {
   },
 
   computed: {
+    ...mapGetters("devices", {
+      getDevices: "getDevicesByRoom",
+    }),
     devices() {
-      return store.getters
-        .getDevicesByRoom(this.room)
-        .filter((device) => device.type == this.deviceType.name);
+      return this.getDevices(this.room)
+        .filter((device) => device.type.id == this.deviceType.id);
     },
 
     // propiedad computada que usa el switch para funcionar
@@ -89,6 +90,13 @@ export default {
         }
 
         // llamada a api
+        // const p = await Promise.all(this.devices.map(async (device) => {
+        //   if (device.state == state) {
+        //     console.log("No hay cambio de estado " + device.name);
+        //     return;
+        //   }
+
+        // }))
         this.devices.forEach((device) => {
           // no llamo al api en este caso
           if (device.state == state) {
@@ -96,24 +104,24 @@ export default {
             return;
           }
 
-          api.setDeviceState(
-            device.id,
-            state,
-            () => { // ok
-              var data = { deviceId: device.id, newState: state };
-              store.commit("setDeviceState", data);
-            },
-            () => { // error
-              console.error("Api error: " + device.name);
-              // sacar de lista
-              if (value) {
-                selected = selected.filter((id) => id != device.id);
-              } else {  // agregar a lista
-                selected.push(device.id.toString());
-              }
-              this.selected = selected;
-            }
-          );
+          // api.setDeviceState(
+          //   device.id,
+          //   state,
+          //   () => { // ok
+          //     var data = { deviceId: device.id, newState: state };
+          //     store.commit("setDeviceState", data);
+          //   },
+          //   () => { // error
+          //     console.error("Api error: " + device.name);
+          //     // sacar de lista
+          //     if (value) {
+          //       selected = selected.filter((id) => id != device.id);
+          //     } else {  // agregar a lista
+          //       selected.push(device.id.toString());
+          //     }
+          //     this.selected = selected;
+          //   }
+          // );
         });
 
         this.selected = selected;
@@ -128,12 +136,19 @@ export default {
         this.selected = this.selected.filter((id) => id != deviceId);
       } else this.selected.push(deviceId.toString());
     },
+    isActive(device) {
+      const inactiveStates = ['off', 'stopped']
+      return !inactiveStates.includes(device.state.status);
+    },
+    ...mapActions("devices", {
+      executeAction: "action"
+    })
   },
 
   created() {
     // set up active devices as selected for the model to work properly
     this.devices.forEach((device) => {
-      if (device.state > 0) this.selected.push(device.id.toString());
+      if (this.isActive(device)) this.selected.push(device.id.toString());
     });
   },
 };
