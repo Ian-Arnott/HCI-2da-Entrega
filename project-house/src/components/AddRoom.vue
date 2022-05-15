@@ -21,6 +21,7 @@
               <v-text-field
                 v-model="name"
                 :rules="nameRules"
+                :counter="maxChars"
                 label="Room name"
                 required
               ></v-text-field>
@@ -61,12 +62,12 @@ export default {
       valid: false,
       name: "",
       minChars: 3,
-      maxChars: 60,
+      maxChars: 20,
       nameRules: [
         (v) => !!v || "Room name is required",
         (v) => /^[\w ]+$/.test(v) || "Invalid character",
         (v) => (v && v.length >= this.minChars && v.length <= this.maxChars) ||
-          "Room name must be between 3-60 characters",
+          `Room name must be between ${this.minChars}-${this.maxChars} characters`,
       ],
       type: "",
       typeRules: [(v) => !!v || "Room type is required"],
