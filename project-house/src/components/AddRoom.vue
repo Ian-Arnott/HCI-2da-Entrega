@@ -16,7 +16,7 @@
       </v-card-title>
       <v-card-text>
         <v-form v-model="valid" @submit.prevent>
-          <v-row>
+          <v-row v-if="title == 'Add Room'">
             <v-col>
               <v-text-field
                 v-model="name"
@@ -29,19 +29,94 @@
               <v-select
                 v-model="type"
                 :rules="typeRules"
-                :items="types"
+                :items="typesRoom"
                 item-text="name"
                 label="Room type"
                 required
               ></v-select>
             </v-col>
           </v-row>
+        <v-container v-if="title == 'Add Device'">
+          <v-row>
+            <v-col>
+              <v-text-field 
+                v-model="name"
+                :rules="nameRules"
+                label="Device name"
+                required
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-select
+                v-model="type"
+                :rules="typeRules"
+                :items="typesDevice"
+                item-text="name"
+                label="Device type"
+                required
+              ></v-select>
+            </v-col>
+            <v-col>
+              <!-- Falta poner la lista de lo cuartos disponibles -->
+              <v-select
+                v-model="type"
+                :rules="typeRules"
+                :items="typesRoom" 
+                item-text="name"
+                label="Select room"
+                required
+              ></v-select>
+            </v-col>              
+          </v-row>
+        </v-container>
+      <v-container v-if="title == 'Add Routine'">
+        <v-row>
+          <v-col>
+            <v-text-field
+                v-model="name"
+                :rules="nameRules"
+                label="Routine name"
+                required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="auto">
+            <v-text>Add new action</v-text>
+          </v-col>
+          <v-col>
+            <v-btn color="primary"  icon outlined>
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-select
+            label="Select device"></v-select>
+          </v-col>
+          <v-col>
+            <v-select
+            label="Select action"></v-select>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn color="primary"  icon outlined>
+              <v-icon>mdi-minus</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="closeDialog()"> Close </v-btn>
-        <v-btn :disabled="!valid" color="primary" @click="addRoom()">Add</v-btn>
+    <!-- Falta addDevice() y addRoutine() -->
+        <v-btn v-if="title == 'Add Room'" :disabled="!valid" color="primary" @click="addRoom()">Add</v-btn>
+        <v-btn v-if="title == 'Add Device'" :disabled="!valid" color="primary" @click="addRoom()">Add</v-btn>
+        <v-btn v-if="title == 'Add Routine'" :disabled="!valid" color="primary" @click="addRoom()">Add</v-btn>
       </v-card-actions>
     </v-card>
 
@@ -56,6 +131,10 @@ import { mapActions } from "vuex";
 import { Room } from "@/api/rooms";
 
 export default {
+  props: {
+    title: String,
+    icon: String
+  },
   data() {
     return {
       valid: false,
@@ -63,22 +142,27 @@ export default {
       minChars: 3,
       maxChars: 60,
       nameRules: [
-        (v) => !!v || "Room name is required",
+        (v) => !!v || "Name is required",
         (v) => /^[\w ]+$/.test(v) || "Invalid character",
         (v) => (v && v.length >= this.minChars && v.length <= this.maxChars) ||
-          "Room name must be between 3-60 characters",
+          "Name must be between 3-60 characters",
       ],
       type: "",
-      typeRules: [(v) => !!v || "Room type is required"],
-      types: [
+      typeRules: [(v) => !!v || "Type is required"],
+      typesRoom: [
         { name: "Kitchen", img: "kitchen.jpeg" },
         { name: "Bedroom", img: "bedroom.jpeg" },
         { name: "Living Room", img: "living-room.jpg" },
         { name: "Other", img: "empty-room.jpg" },
       ],
+      typesDevice: [
+        { name: "Light"},
+        { name: "Speaker"},
+        { name: "Air Conditioner"},
+        { name: "Oven"},
+        { name: "Alarm"}
+      ],
       opened: false,
-      title: "Add Room",
-      icon: "mdi-bed",
       snackbar: {
         show: false,
         text: "",

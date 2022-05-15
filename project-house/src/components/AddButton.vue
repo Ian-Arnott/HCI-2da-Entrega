@@ -10,34 +10,19 @@
     </template>
 
     <v-list>
-      <AddDevice @dialogClosed="menu = false"/>
-      <AddRoom @dialogClosed="menu = false"/>
-      <AddRoutine @dialogClosed="menu = false"/>
+      <AddRoom icon="mdi-lightbulb" title="Add Device" @dialogClosed="menu = false"/>
+      <AddRoom icon="mdi-bed" title="Add Room" @dialogClosed="menu = false"/>
+      <AddRoom icon="mdi-timeline-text" title="Add Routine" @dialogClosed="menu = false"/>
     </v-list>
   </v-menu>
 </template>
 
 <script>
-import AddDevice from './AddDevice.vue'
 import AddRoom from './AddRoom.vue'
-import AddRoutine from './AddRoutine.vue'
 
 export default {
-  components: { AddDevice, AddRoom, AddRoutine },
+  components: { AddRoom },
   name: "AddButton",
-
-  data() {
-    return {
-      menu: false,
-      
-      // menu items
-      items: [
-        { title: "Add room", opened: false, icon: "mdi-bed", component: 'AddRoom' },
-        { title: "Add device", opened: false, icon: "mdi-lightbulb", component: 'AddDevice' },  // mdi-devices
-        { title: "Add routine", opened: false, icon: "mdi-timeline-text", component: 'AddRoutine' }, // mdi-text-box
-      ],
-    }
-  }
 }
 </script>
 
