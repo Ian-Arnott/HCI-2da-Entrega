@@ -1,6 +1,10 @@
 <template>
   <v-container>
-    <v-row justify="center">
+    <v-img v-if="loading" 
+          contain height="50px" 
+          :src="require('@/assets/ajax_loader.gif')" 
+          alt="loading"/>
+    <v-row v-else justify="center">
       <v-container v-show="rooms.length == 0" fill-height>
         <v-col>
           <h1 class="display-1 my-2">Oops, this is empty</h1>
@@ -37,7 +41,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "RoomsPage",
@@ -47,6 +51,7 @@ export default {
   data() {
     return {
       cardHovered: null,
+      loading: false
     }
   },
 
@@ -57,21 +62,19 @@ export default {
   },
   methods: {
     ...mapActions("rooms", {
-      getDevices: "getDevices",
-      getActiveDevices: "getActiveDevices"
+      getRooms: "getAll",
     }),
   },
   async created() {
-      try {
-        await this.rooms.forEach(room => {
-          this.getDevices(room.id)
-
-          console.log('device count:', room.meta.deviceCount)
-          console.log('active device count:', room.meta.activeDeviceCount)
-        });
-      } catch (error) {
-        console.error(error) 
-      }
+    try {
+      this.loading = true
+      // setTimeout(async () => {
+        await this.getRooms()
+        this.loading = false
+      // }, 1000)
+    } catch (error) {
+      console.error(error)
+    }     
   }
 };
 </script>

@@ -3,19 +3,27 @@
     <NavigationBar />
 
     <v-main>
-      <router-view :key="$route.path" />
+      <v-container v-if="!connected" fill-height class="text-center">
+        <v-col>
+          <v-icon size="200px">mdi-wifi-strength-off-outline</v-icon>
+          <!-- mdi-connection -->
+          <!-- mdi-wifi-strength-off-outline -->
+          <!-- mdi-lan-disconnect -->
+          <h1 class="display-1 mb-2">Whoops, you are offline</h1>
+          <p>Check your internet connection and try again</p>
+        </v-col>
+      </v-container>
+      <router-view v-else :key="$route.path" />
     </v-main>
 
     <!-- FAB -->
-    <AddButton v-if="this.$route.name != 'NotFound'" />
+    <AddButton v-if="showAddButton"/>
   </v-app>
 </template>
 
 <script>
 import AddButton from "@/components/AddButton.vue";
 import NavigationBar from "@/components/NavigationBar";
-import api from "@/api/api.js";
-import store from "@/store/store.js";
 
 import { mapActions } from "vuex";
 
@@ -26,30 +34,34 @@ export default {
     AddButton,
     NavigationBar,
   },
-
-  methods: {
-    ...mapActions("rooms", {
-      $getAllRooms: "getAll",
-    }),
-    async getAllRooms() {
-      try {
-        await this.$getAllRooms();
-      } catch (e) {
-        console.log(e)
-      }
+  computed: {
+    connected() {
+      return this.$store.getters["connected"];
+    },
+    showAddButton() {
+       return this.connected && this.$route.name != 'NotFound'
     }
   },
-  
-  // este metodo se llama cuando se crea el componente, lo usamos para cargar datos
+  methods: {
+    ...mapActions("rooms", {
+      getRooms: "getAll",
+    }),
+    ...mapActions("devices", {
+      getDevices: "getAll",
+    }),
+    ...mapActions("deviceTypes", {
+      getDeviceTypes: "getAll",
+    }),
+  },
+
   async created() {
-    await this.getAllRooms();
-    
-    api.getDevices((devices) => {
-      store.commit("setDevices", devices);
-    });
-    api.getDeviceTypes((types) => {
-      store.commit("setDeviceTypes", types);
-    });
+    try {
+      // await this.getRooms(); // lo hago en rooms page
+      await this.getDevices();
+      await this.getDeviceTypes();
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 </script>

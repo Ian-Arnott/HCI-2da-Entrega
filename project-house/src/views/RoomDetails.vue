@@ -4,26 +4,31 @@
     <v-container class="text-center pa-0">
       <h1 class="display-1 ma-3">{{ room.name }}</h1>
       <p class="subheading font-weight-regular">
-        {{ room.meta.deviceCount }} devices<v-icon>mdi-circle-small</v-icon
-        >{{ room.meta.activeDeviceCount }} active
+        {{ deviceCount }} devices<v-icon>mdi-circle-small</v-icon
+        >{{ activeDeviceCount }} active
       </p>
     </v-container>
 
-    <v-list class="text-center">
+    <v-img v-if="loading" 
+          contain height="50px" 
+          :src="require('@/assets/ajax_loader.gif')" 
+          alt="loading"/>
+    <v-list v-else class="text-center">
       <!-- One DeviceList per category -->
       <DeviceList
         v-for="type in deviceTypes"
-        :key="type.name"
+        :key="type.id"
         :deviceType="type"
         :room="room"
       />
+
+      <!-- <p v-for="type in deviceTypes" :key="type.name">{{type}}</p> -->
     </v-list>
   </v-container>
 </template>
 
 <script>
-// import rooms from "@/store/modules/rooms"
-import { mapState, mapGetters } from "vuex"
+import { mapState, mapGetters, mapActions } from "vuex";
 import DeviceList from "@/components/DeviceList";
 import BackButton from "../components/BackButton.vue";
 
@@ -43,23 +48,47 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      loading: false
+    };
   },
 
   computed: {
     ...mapState("rooms", {
-      rooms: (state) => state.rooms
+      rooms: (state) => state.rooms,
     }),
     ...mapGetters("rooms", {
       getRoomByName: "getRoomByName",
     }),
     room() {
-      return this.getRoomByName(this.slug)
+      return this.getRoomByName(this.slug);
     },
+    deviceCount() {
+      return this.room.meta.deviceCount;
+    },
+    activeDeviceCount() {
+      return this.room.meta.activeDeviceCount;
+    },
+
+    ...mapState("deviceTypes", {
+      deviceTypes: (state) => state.deviceTypes,
+    }),
   },
-  created() {
-    // TODO get device types
-    // return store.state.deviceTypes;
-  }
+  methods: {
+    ...mapActions("devices", {
+      getDevices: "getAll",
+    }),
+  },
+  async created() {
+    try {
+      this.loading = true;
+      // setTimeout(async () => {
+      await this.getDevices();
+      this.loading = false;
+      // }, 1000)
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };
 </script>

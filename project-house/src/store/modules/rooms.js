@@ -4,7 +4,7 @@ export default {
     namespaced: true,
 
     state: {
-        rooms: []
+        rooms: [],
     },
     getters: {
         getRoomBySlug: (state) => (slug) => {
@@ -16,6 +16,10 @@ export default {
         getRoomByName: (state) => (roomName) => {
             return state.rooms.find(room => room.name == roomName);
         },
+        getActiveDevices: () => (devices) => {
+            // TODO
+            return !devices ? 0 : devices.filter(device => device.state.status == "on").length
+        }
     },
     actions: {
         async add({ dispatch }, room) {
@@ -40,19 +44,19 @@ export default {
             dispatch('getAll')
             return result
         },
-        async getAll({ commit }) {
-            const result = await RoomApi.getAll()
-            commit('update', result)
-            return result
-        },
-        async getDevices({ getters, dispatch }, id) {
-            const result = await RoomApi.getDevicesFromRoom(id)
-            const room = getters.getRoomById(id)
-            room.meta.deviceCount = result ? result.length : 0
-            // TODO fijarse cuales estan activos y setearlos
-            room.meta.activeDeviceCount = !result ? 0 : result.filter(device => device.state.status == "on").length
-            console.log(result)
-            dispatch('edit', room)
+        async getAll({ commit, getters }) {
+            const rooms = await RoomApi.getAll()
+
+            for (let i = 0; i < rooms.length; i++) {
+                const room = rooms[i];
+                const devices = await RoomApi.getDevicesFromRoom(room.id)
+                room.meta.deviceCount = devices ? devices.length : 0
+                room.meta.activeDeviceCount = getters.getActiveDevices(devices)
+                console.log('Room id:', room.id)
+            }
+
+            commit('update', rooms)
+            return rooms
         },
         async addDevice({ dispatch }, { roomId, deviceId }) {
             const result = await RoomApi.addDeviceToRoom(roomId, deviceId)

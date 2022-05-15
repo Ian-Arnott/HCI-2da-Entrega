@@ -10,5 +10,13 @@ new Vue({
   store,
   router,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  created () {
+    window.addEventListener('offline', () => {
+      store.dispatch('setConnected', false)
+    })
+    window.addEventListener('online', () => {
+      store.dispatch('setConnected', true)
+    })
+  }
 }).$mount('#app')
