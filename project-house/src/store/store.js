@@ -10,20 +10,31 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    connected: navigator.onLine // variable del navegador
+    connected: navigator.onLine, // variable del navegador
+    snackbar: {
+      show: false,
+      text: ""
+    }
   },
   getters: {
     connected: state => state.connected,
+    snackbar: state => state.snackbar,
   },
   mutations: {
-    'SET_CONNECTED' (state, payload) {
+    'SET_CONNECTED'(state, payload) {
       state.connected = payload
     },
+    'SET_SNACKBAR'(state, snackbar) {
+      state.snackbar = snackbar
+    }
   },
   actions: {
-    setConnected ({ commit }, payload) {
+    setConnected({ commit }, payload) {
       commit('SET_CONNECTED', payload)
     },
+    setSnackbar({ commit }, snackbar) {
+      commit('SET_SNACKBAR', snackbar)
+    }
   },
   modules: {
     rooms,
