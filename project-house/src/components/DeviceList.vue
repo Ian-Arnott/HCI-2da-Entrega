@@ -5,7 +5,7 @@
     @mouseleave="listHovered = false"
   >
     <v-list-item class="pa-0">
-      <v-subheader>{{ deviceType.name }}</v-subheader>
+      <v-subheader>{{ deviceTypeName }}</v-subheader>
       <v-switch
         v-model="selectAll"
         v-show="listHovered || selectAll"
@@ -62,13 +62,16 @@ export default {
 
   computed: {
     ...mapGetters("devices", {
-      getDevices: "getDevicesByRoom",
+      getDevicesByRoom: "getDevicesByRoom",
+      getDevicesByType: "getDevicesByType",
     }),
     devices() {
-      return this.getDevices(this.room)
-        .filter((device) => device.type.id == this.deviceType.id);
+      const devices = this.getDevicesByRoom(this.room)
+      return this.getDevicesByType(this.deviceType, devices)
     },
-
+    deviceTypeName() {
+      return this.deviceType.name.charAt(0).toUpperCase() + this.deviceType.name.slice(1) + 's'
+    },
     // propiedad computada que usa el switch para funcionar
     selectAll: {
       get() {
@@ -77,8 +80,8 @@ export default {
           : false;
       },
       set(value) {
-        var selected = [];
-        var state;
+        let selected = [];
+        let state;
 
         if (value) {
           this.devices.forEach((device) => {
@@ -108,7 +111,7 @@ export default {
           //   device.id,
           //   state,
           //   () => { // ok
-          //     var data = { deviceId: device.id, newState: state };
+          //     let data = { deviceId: device.id, newState: state };
           //     store.commit("setDeviceState", data);
           //   },
           //   () => { // error
@@ -137,7 +140,7 @@ export default {
       } else this.selected.push(deviceId.toString());
     },
     isActive(device) {
-      const inactiveStates = ['off', 'stopped']
+      const inactiveStates = ['off', 'stopped', 'disarmed']
       return !inactiveStates.includes(device.state.status);
     },
     ...mapActions("devices", {

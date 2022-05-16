@@ -24,6 +24,13 @@
 
       <!-- <p v-for="type in deviceTypes" :key="type.name">{{type}}</p> -->
     </v-list>
+
+    <v-container class="text-center" v-show="deviceCount == 0" fill-height>
+      <v-col>
+        <h1 class="display-1 my-2">Oops, this is empty</h1>
+        <p>Click the button on the bottom right to add a device</p>
+      </v-col>
+    </v-container>
   </v-container>
 </template>
 

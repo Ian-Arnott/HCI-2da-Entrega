@@ -33,23 +33,39 @@ export default {
       hovered: false,
       icons: [
         {
-          name: "Lamps",
+          name: "lamp",
           icons: [
             { status: "off", icon: "mdi-lightbulb-off" },
             { status: "on", icon: "mdi-lightbulb-on" }
           ]
         },
         {
-          name: "Speakers",
+          name: "speaker",
           icons: [
             { status: "stopped", icon: "mdi-speaker-off" },
             { status: "playing", icon: "mdi-speaker-on" }
           ]
         },
         {
-          name: "Alarms",
+          name: "alarm",
           icons: [
-
+            { status: "disarmed", icon: "mdi-shield-off" },
+            { status: "home", icon: "mdi-shield-home" },
+            { status: "armed", icon: "mdi-shield" },
+          ]
+        },
+        {
+          name: "oven",
+          icons: [
+            { status: "off", icon: "mdi-stove" },
+            { status: "on", icon: "mdi-stove" }
+          ]
+        },
+        {
+          name: "ac",
+          icons: [
+            { status: "off", icon: "mdi-air-conditioner" },
+            { status: "on", icon: "mdi-air-conditioner" }
           ]
         }
       ]
@@ -59,7 +75,7 @@ export default {
   computed: {
     isActive() {
       console.log(`${this.device.name}: ${this.device.state.status}`);
-      const inactiveStates = ['off', 'stopped']
+      const inactiveStates = ['off', 'stopped', 'disarmed']
       return !inactiveStates.includes(this.device.state.status);
     },
     icon() {
@@ -78,7 +94,7 @@ export default {
       //   this.device.id,
       //   newState,
       //   () => {
-      //     var data = { deviceId: this.device.id, newState: newState };
+      //     let data = { deviceId: this.device.id, newState: newState };
       //     store.commit("setDeviceState", data);
       //     this.$emit("switched");
       //   },
@@ -89,8 +105,8 @@ export default {
     },
 
     setDeviceState(state) {
-      var oldState = this.device.state;
-      var newState = state;
+      let oldState = this.device.state;
+      let newState = state;
 
       if (oldState == newState) {
         console.log('No hay cambio de estado');
@@ -101,7 +117,7 @@ export default {
       //   this.device.id,
       //   newState,
       //   () => {
-      //     var data = { deviceId: this.device.id, newState: newState };
+      //     let data = { deviceId: this.device.id, newState: newState };
       //     store.commit("setDeviceState", data);
 
       //     // si estaba apagado (0) y se prendio (>=1)

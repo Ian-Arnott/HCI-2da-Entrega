@@ -9,6 +9,9 @@ export default {
     getters: {
         getById: (state) => (id) => {
             return state.deviceTypes.find(type => type.id == id)
+        },
+        getByName: (state) => (name) => {
+            return state.deviceTypes.find(type => type.name == name.toLowerCase())
         }
     },
     mutations: {
@@ -20,10 +23,14 @@ export default {
         async getAll({ commit }) {
             const result = await DeviceTypeApi.get()
 
-            result.forEach(type => {
-                type.name = type.name.charAt(0).toUpperCase() + type.name.slice(1) + 's'
-            });
-            
+            const ids = result.map(type => {
+                return {id: type.id, name: type.name}
+            })
+
+            console.log(ids)
+
+            // logear los nombres de todas las acciones de cada tipo y ver que estado generan
+
             commit('update', result)
             return result
         }

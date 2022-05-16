@@ -13,10 +13,18 @@ export default {
             return state.devices.find(device => device.id == deviceId);
         },
         getDevicesByRoom: (state) => (room) => {
+            if(room.id == "all-devices") return state.devices
             return state.devices.filter(device => device.room && device.room.id == room.id)
         },
+        getDevicesByType: () => (type, devices) => {
+            // let aux = devices
+            // console.log('aux', aux)
+            // if (!aux) aux = state.devices
+
+            return devices.filter(device => device.type.id == type.id)
+        },
         getActiveDevicesByRoom: (state) => (room) => {
-            var devices = [];
+            let devices = [];
 
             if (room && room.id != 0) {
                 devices = state.devices.filter(device => device.room == room.id);
@@ -55,6 +63,11 @@ export default {
         },
         async delete({ dispatch }, id) {
             const result = await DeviceApi.delete(id)
+            dispatch('getAll')
+            return result
+        },
+        async getState({ dispatch }, id) {
+            const result = await DeviceApi.getState(id)
             dispatch('getAll')
             return result
         },

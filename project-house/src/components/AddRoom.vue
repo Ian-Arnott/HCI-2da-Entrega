@@ -41,14 +41,10 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="closeDialog()"> Close </v-btn>
+        <v-btn text @click="closeDialog()">Cancel</v-btn>
         <v-btn :disabled="!valid" color="primary" @click="addRoom()">Add</v-btn>
       </v-card-actions>
     </v-card>
-
-    <v-snackbar v-model="snackbar.show" :timeout="2000">{{
-      snackbar.text
-    }}</v-snackbar>
   </v-dialog>
 </template>
 
@@ -68,6 +64,8 @@ export default {
         (v) => /^[\w ]+$/.test(v) || "Invalid character",
         (v) => (v && v.length >= this.minChars && v.length <= this.maxChars) ||
           `Room name must be between ${this.minChars}-${this.maxChars} characters`,
+        (v) => !/^[\s]+$/.test(v) || "Invalid room name",
+        (v) => !/^All Devices$/.test(v) || "Invalid room name",
       ],
       type: "",
       typeRules: [(v) => !!v || "Room type is required"],
@@ -116,6 +114,7 @@ export default {
         }
       } finally {
         this.snackbar.show = true;
+        this.$store.dispatch('setSnackbar', this.snackbar)
       }
     },
     closeDialog() {

@@ -16,12 +16,16 @@
       <router-view v-else :key="$route.path" />
     </v-main>
 
+    <!-- Notifications -->
+    <SnackBar/>
+
     <!-- FAB -->
     <AddButton v-if="showAddButton"/>
   </v-app>
 </template>
 
 <script>
+import SnackBar from '@/components/SnackBar.vue';
 import AddButton from "@/components/AddButton.vue";
 import NavigationBar from "@/components/NavigationBar";
 
@@ -31,6 +35,7 @@ export default {
   name: "App",
 
   components: {
+    SnackBar,
     AddButton,
     NavigationBar,
   },
@@ -60,7 +65,7 @@ export default {
       await this.getDevices();
       await this.getDeviceTypes();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   },
 };

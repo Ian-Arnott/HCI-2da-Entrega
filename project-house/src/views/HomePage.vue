@@ -29,22 +29,15 @@
         <router-view :key="$route.path"/>
       </v-col>
     </v-row>
-
-    <SnackBar/>
   </v-container>
 </template>
 
 <script>
-import SnackBar from '@/components/SnackBar.vue';
 
 export default {
   // props: {
   //   username: String,
   // }
-
-  components: {
-    SnackBar
-  },
 
   data() {
     return {

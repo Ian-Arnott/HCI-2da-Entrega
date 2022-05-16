@@ -22,7 +22,7 @@ class DeviceApi {
     }
 
     static async update(device) {
-        return await Api.put(DeviceApi.getUrl(device.id), device)
+        return await Api.put(DeviceApi.getUrl(device.id), { name: device.name, meta: device.meta })
     }
 
     static async getState(id) {
@@ -39,9 +39,14 @@ class DeviceApi {
 }
 
 class Device {
-    // constructor(id, name, type, state, meta) {
-
-    // }
+    constructor(id, name, type, meta) {
+        if (id) {
+            this.id = id
+        }
+        this.name = name
+        this.type = type
+        this.meta = meta
+    }
 
     toString() {
         return JSON.stringify(this, null, 2)

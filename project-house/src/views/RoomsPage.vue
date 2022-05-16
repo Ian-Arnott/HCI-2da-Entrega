@@ -13,28 +13,7 @@
       </v-container>
 
       <v-col cols="auto" md="3" v-for="room in rooms" :key="room.name">
-        <v-card hover ripple :to="{ name: 'RoomDetails', params: { slug: room.name } }"
-                @mouseenter="cardHovered = room.name"
-                @mouseleave="cardHovered = null">
-          <v-img
-            max-height="100px"
-            :src="require(`@/assets/rooms/${room.meta.img}`)"
-            :alt="room.name"
-          />
-
-          <!-- Show only if this card is being hovered -->
-          <v-card-actions>
-            <v-btn v-show="cardHovered === room.name && room.meta.editable" absolute right @click.stop.prevent fab small>
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-          </v-card-actions>
-
-          <v-card-title>{{ room.name }}</v-card-title>
-          <v-card-text align="left">{{ room.meta.deviceCount  }} devices
-            <v-icon>mdi-circle-small</v-icon>
-            {{ room.meta.activeDeviceCount  }} active
-          </v-card-text>
-        </v-card>
+        <RoomCard :room="room"/>
       </v-col>
     </v-row>
   </v-container>
@@ -42,15 +21,15 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import RoomCard from '@/components/RoomCard.vue';
 
 export default {
   name: "RoomsPage",
 
-  components: {},
+  components: {RoomCard},
 
   data() {
     return {
-      cardHovered: null,
       loading: false
     }
   },

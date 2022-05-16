@@ -10,53 +10,74 @@
     <v-card class="text-center overflow-hidden" max-width="600px">
       <v-toolbar flat>
         <!-- <v-icon>mdi-lightbulb</v-icon> -->
-        <v-toolbar-title class="text-h5">{{ device.name }} - {{ roomName }}</v-toolbar-title>
+        <v-toolbar-title class="text-h5">{{ device.name }}{{ roomName }}</v-toolbar-title>
         <v-spacer></v-spacer>
-        <!-- edit -->
+        
+        <!-- Edit button -->
         <v-btn icon @click="isEditing = !isEditing">
           <v-icon v-if="isEditing">mdi-close</v-icon>
           <v-icon v-else>mdi-pencil</v-icon>
         </v-btn>
-        <!-- delete -->
-        <v-btn icon @click="deleteDevice">
-          <v-icon>mdi-delete</v-icon>
-        </v-btn>
+
+        <!-- Delete Dialog -->
+        <v-dialog v-model="confirmMenu" max-width="300px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon @click.stop v-bind="attrs" v-on="on">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </template>
+
+          <v-card dark color="warning">
+            <v-card-title>Delete Confirmation</v-card-title>
+            <v-card-text>Are you sure you want to delete "{{device.name}}"</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text @click="confirmMenu = false">Cancel</v-btn>
+              <v-btn text @click="deleteDevice">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-toolbar>
 
       <!-- Edit fields -->
       <v-card-text class="mt-2" v-if="isEditing">
-        <v-text-field
-          :disabled="!isEditing"
-          clearable
-          counter="20"
-          :placeholder="device.name"
-          persistent-placeholder
-          v-model="newDeviceName"
-          color="secondary"
-          label="Device name"
-        ></v-text-field>
-        <v-autocomplete
-          :disabled="!isEditing"
-          :items="rooms"
-          v-model="roomPicked"
-          color="secondary"
-          item-text="name"
-          label="Room"
-        ></v-autocomplete>
+        <v-form v-model="valid" @submit.prevent>
+          <!-- Device Name -->
+          <v-text-field
+            :disabled="!isEditing"
+            :rules="nameRules"
+            :counter="maxChars"
+            v-model="newDeviceName"
+            :placeholder="device.name"
+            persistent-placeholder
+            color="secondary"
+            label="Device name"
+          ></v-text-field>
+          <!-- Select Room -->
+          <v-autocomplete
+            :disabled="!isEditing"
+            :items="getRooms"
+            item-text="name"
+            v-model="roomPicked"
+            :placeholder="device.room ? device.room.name : 'No Room'"
+            persistent-placeholder
+            color="secondary"
+            label="Room"
+          ></v-autocomplete>
+        </v-form>
       </v-card-text>
 
       <!-- Action fields -->
-      <v-card-text v-else> LOAD ACTIONS ACCORDING TO DEVICE TYPE </v-card-text>
+      <v-card-text v-else>
+        {{ deviceState }}
+      </v-card-text>
 
       <v-divider></v-divider>
       <v-card-actions v-show="isEditing">
         <v-spacer></v-spacer>
         <v-btn text @click="menu=false">Close</v-btn>
-        <v-btn text :disabled="!changed()" @click="save">Save</v-btn>
+        <v-btn :disabled="!changed() || !valid" color="primary" @click="save">Save</v-btn>
       </v-card-actions>
-      <!-- <v-snackbar v-model="hasSaved" :timeout="2000" absolute bottom left>
-        The device has been updated
-      </v-snackbar> -->
     </v-card>
   </v-dialog>
 </template>
@@ -74,69 +95,128 @@ export default {
 
   data() {
     return {
+      valid: false,
       isEditing: false,
-      hasSaved: false,
-      newDeviceName: null,
-      roomPicked: null,
-      menu: false
+      newDeviceName: "",
+      minChars: 3,
+      maxChars: 20,
+      nameRules: [
+        (v) => /^$|^[\w ]+$/.test(v) || "Invalid character",
+        (v) => (v.length == 0 || (v.length >= this.minChars && v.length <= this.maxChars)) ||
+          `Device name must be between ${this.minChars}-${this.maxChars} characters`,
+        (v) => !/^[\s]+$/.test(v) || "Invalid device name",
+      ],
+      roomPicked: "",
+      menu: false,
+      confirmMenu: false,
+
+      deviceState: null,
     };
   },
 
   computed: {
     roomName() {
-      let roomName = "Not linked to any room"
+      let roomName = ""
       console.log(this.device)
-      if (this.device.room) roomName = this.device.room.name
+      if (this.device.room) roomName = " - " + this.device.room.name
       return roomName
     },
     ...mapState("rooms", {
       rooms: (state) => state.rooms,
     }),
+    ...mapGetters("rooms", {
+      getRoomByName: "getRoomByName",
+    }),
+    getRooms() {
+      let rooms = this.rooms.map((room) => {
+        let name = room.name
+        if (room.id == "all-devices") name = 'No Room'
+        return { name: name }
+      })
+
+      let roomName
+      // not linked to any room
+      if (!this.device.room) roomName = 'No Room'
+      else roomName = this.device.room.name
+
+      return rooms.filter(room => room.name != roomName)
+    }
   },
 
   methods: {
     changed() {
-      return this.roomPicked != null || this.newDeviceName != null;
+      return this.roomPicked != "" || this.newDeviceName != "";
     },
-    ...mapGetters("rooms", {
-      getRoomByName: "getRoomByName",
-    }),
     ...mapActions("devices", {
       editDevice: "edit",
       $deleteDevice: "delete",
+      getDeviceState: "getState",
+    }),
+    ...mapActions("rooms", {
+      addDeviceToRoom: "addDevice", 
+      removeDeviceFromRoom: "deleteDevice",
     }),
     async save() {
-      this.isEditing = !this.isEditing;
-      this.hasSaved = true;
-
-      let roomId;
-      if (this.roomPicked == null) {
-        // no se cambio el room pero si el device name
-        roomId = this.device.room;
-      } else {
-        roomId = this.getRoomByName(this.roomPicked).id;
+      // cambio de nombre
+      if(this.newDeviceName != "") {
+        console.log('new name:', this.newDeviceName)
+        try {
+          await this.editDevice({ 
+            id: this.device.id, 
+            name: this.newDeviceName, 
+            meta: this.device.meta 
+          })
+        } catch (error) {
+          console.error(error)
+        }
       }
 
-      let data = {
-        deviceId: this.device.id,
-        deviceName:
-          this.newDeviceName == null ? this.device.name : this.newDeviceName,
-        roomId: roomId,
-      };
+      // casos de cambio de cuarto:
+      // 1- estaba sin cuarto y paso a un cuarto => link
+      // 2- estaba en un cuarto y paso a sin cuarto => unlink
+      // 3- estaba en un cuarto y paso a otro cuarto => unlink + link
+      // 4- no cambio el cuarto
+      let roomId
+      if (!this.device.room) {
+        if(this.roomPicked != "") {
+          // link
+          roomId = this.getRoomByName(this.roomPicked).id;
+          await this.addDeviceToRoom({ roomId: roomId, deviceId: this.device.id })
+        }
+      } else if (this.roomPicked != "") {
+        // unlink
+        await this.removeDeviceFromRoom(this.device.id)
+        if (this.roomPicked != "No Room") {
+          // link
+          roomId = this.getRoomByName(this.roomPicked).id;
+          await this.addDeviceToRoom({ roomId: roomId, deviceId: this.device.id })
+        }
+      }
 
-      // TODO crear un device nuevo y pasarle eso
-      // ver que llamadas hacer dependiendo si se cambio el cuarto o solo el name
-      console.log(data);
-      await this.editDevice(this.device)
+      this.$store.dispatch("setSnackbar", { show: true, text: "The device has been updated" })
+
+      this.isEditing = !this.isEditing;
       this.menu = false
     },
 
     async deleteDevice() {
-      // TODO Falta pedir confirmacion
-      await this.$deleteDevice(this.device.id)
-      console.log("Device deleted");
-      this.menu = false
+      try{
+        await this.$deleteDevice(this.device.id)
+        console.log("Device deleted");
+        this.menu = false
+        this.confirmMenu = false
+        this.$store.dispatch("setSnackbar", { show: true, text: "Device deleted" })
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
+  async created() {
+    try {
+      this.deviceState = await this.getDeviceState(this.device.id)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 };
 </script>
