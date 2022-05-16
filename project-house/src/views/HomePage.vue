@@ -10,7 +10,7 @@
         />
       </v-col>
       <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Welcome Home</h1>
+        <h1 class="display-2 font-weight-bold mb-3">Welcome</h1>
 
         <p class="subheading font-weight-regular">
           {{ username }}
@@ -20,8 +20,7 @@
       <v-col cols="12">
         <template>
           <v-tabs centered>
-            <v-tab>Devices</v-tab>
-            <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
+            <v-tab :to="{ name: 'Rooms' }">Home</v-tab>
             <v-tab :to="{ name: 'Routines' }">Routines</v-tab>
           </v-tabs>
         </template>
@@ -29,11 +28,14 @@
       <v-col cols="12">
         <router-view :key="$route.path"/>
       </v-col>
-    </v-row>    
+    </v-row>
+
+    <SnackBar/>
   </v-container>
 </template>
 
 <script>
+import SnackBar from '@/components/SnackBar.vue';
 
 export default {
   // props: {
@@ -41,6 +43,7 @@ export default {
   // }
 
   components: {
+    SnackBar
   },
 
   data() {

@@ -16,7 +16,7 @@ const routes = [
         component: HomePage,
         children: [
             {
-                path: 'rooms',
+                path: 'home',
                 name: 'Rooms',
                 component: () => import(/* webpackChunkName: "rooms" */"@/views/RoomsPage")
             },
@@ -35,7 +35,7 @@ const routes = [
 
     // rutas dinamicas para rooms y routines
     {
-        path: '/rooms/:slug',
+        path: '/home/:slug',
         name: 'RoomDetails',
         component: () => import(/* webpackChunkName: "room-details" */"@/views/RoomDetails"),
         props: true,

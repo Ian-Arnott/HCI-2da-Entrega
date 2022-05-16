@@ -24,7 +24,7 @@
 
           <!-- Show only if this card is being hovered -->
           <v-card-actions>
-            <v-btn v-show="cardHovered === room.name" absolute right @click.stop.prevent fab small>
+            <v-btn v-show="cardHovered === room.name && room.meta.editable" absolute right @click.stop.prevent fab small>
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
           </v-card-actions>
