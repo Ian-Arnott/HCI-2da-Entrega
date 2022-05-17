@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import HomePage from '../views/HomePage.vue';
-import LoginPage from '../views/LoginPage.vue';
+// import LoginPage from '../views/LoginPage.vue';
 
 import store from "@/store/store"
 
@@ -27,13 +27,13 @@ const routes = [
             },
         ]
     },
-    {
-        path: '/login',
-        name: 'Login',
-        component: LoginPage
-    },
+    // {
+    //     path: '/login',
+    //     name: 'Login',
+    //     component: LoginPage
+    // },
 
-    // rutas dinamicas para rooms y routines
+    // rutas dinamicas para rooms
     {
         path: '/home/:slug',
         name: 'RoomDetails',
@@ -67,11 +67,11 @@ const router = new VueRouter({
     routes
 })
 
-const isAuthenticated = true;
+// const isAuthenticated = true;
 
-router.beforeEach((to, from, next) => {
-    if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
-    else next()
-})
+// router.beforeEach((to, from, next) => {
+//     if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' })
+//     else next()
+// })
 
 export default router

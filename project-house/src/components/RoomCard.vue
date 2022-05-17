@@ -48,8 +48,8 @@
                 <v-card-text>Are you sure you want to delete "{{room.name}}"?</v-card-text>
                 <v-list nav dense dark color="warning">
                   <v-list-item-group v-model="deleteOption">
-                    <v-list-item>Delete "{{room.name}}" and all it's devices</v-list-item>
-                    <v-list-item>Delete "{{room.name}}" but keep devices</v-list-item>
+                    <v-list-item>Delete room and all it's devices</v-list-item>
+                    <v-list-item>Delete room but keep devices</v-list-item>
                   </v-list-item-group>
                 </v-list>
                 <v-card-actions>
