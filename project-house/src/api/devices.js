@@ -33,8 +33,8 @@ class DeviceApi {
         return await Api.get(`${Api.baseUrl}/devicetypes/${typeId}`)
     }
 
-    static async executeAction(id, actionName) {
-        return await Api.put(`${DeviceApi.getUrl(id)}/${actionName}`, {})
+    static async executeAction(id, actionName, params) {
+        return await Api.put(`${DeviceApi.getUrl(id)}/${actionName}`, params ? params : {})
     }
 }
 

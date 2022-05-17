@@ -43,7 +43,8 @@ export default {
           name: "speaker",
           icons: [
             { status: "stopped", icon: "mdi-speaker-off" },
-            { status: "playing", icon: "mdi-speaker-on" }
+            { status: "playing", icon: "mdi-speaker" },
+            { status: "paused", icon: "mdi-speaker" },
           ]
         },
         {
@@ -75,7 +76,7 @@ export default {
   computed: {
     isActive() {
       console.log(`${this.device.name}: ${this.device.state.status}`);
-      const inactiveStates = ['off', 'stopped', 'disarmed']
+      const inactiveStates = ['off', 'stopped', 'paused', 'disarmed']
       return !inactiveStates.includes(this.device.state.status);
     },
     icon() {

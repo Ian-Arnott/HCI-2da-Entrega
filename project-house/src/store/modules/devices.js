@@ -71,9 +71,9 @@ export default {
             dispatch('getAll')
             return result
         },
-        async action({ dispatch }, { id, actionName }) {
-            const result = await DeviceApi.executeAction(id, actionName)
-            dispatch('getAll')
+        async action({ dispatch }, { id, actionName, params }) {
+            const result = await DeviceApi.executeAction(id, actionName, params)
+            dispatch('getState', id)
             return result
         },
     }

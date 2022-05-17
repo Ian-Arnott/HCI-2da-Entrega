@@ -67,9 +67,15 @@
         </v-form>
       </v-card-text>
 
-      <!-- Action fields -->
+      <!-- State and Action fields -->
       <v-card-text v-else>
-        {{ deviceState }}
+        <!-- {{ deviceState }} -->
+        <v-container v-if="device.type.name == 'speaker'">
+          <SpeakerDetails :device="device"/>
+        </v-container>
+        <v-container v-else-if="device.type.name == 'lamp'">
+          <LampDetails :device="device"/>
+        </v-container>
       </v-card-text>
 
       <v-divider></v-divider>
@@ -84,8 +90,14 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import SpeakerDetails from "@/components/devices/SpeakerDetails"
+import LampDetails from "@/components/devices/LampDetails"
+
 export default {
-  components: {},
+  components: {
+    SpeakerDetails,
+    LampDetails,
+  },
 
   props: {
     device: {
@@ -109,8 +121,6 @@ export default {
       roomPicked: "",
       menu: false,
       confirmMenu: false,
-
-      deviceState: null,
     };
   },
 
@@ -140,6 +150,9 @@ export default {
       else roomName = this.device.room.name
 
       return rooms.filter(room => room.name != roomName)
+    },
+    deviceState() {
+      return this.device.state
     }
   },
 
@@ -213,7 +226,7 @@ export default {
   },
   async created() {
     try {
-      this.deviceState = await this.getDeviceState(this.device.id)
+      await this.getDeviceState(this.device.id)
     } catch (error) {
       console.error(error)
     }
