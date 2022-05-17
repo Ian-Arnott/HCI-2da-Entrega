@@ -31,45 +31,7 @@ export default {
   data() {
     return {
       hovered: false,
-      icons: [
-        {
-          name: "lamp",
-          icons: [
-            { status: "off", icon: "mdi-lightbulb-off" },
-            { status: "on", icon: "mdi-lightbulb-on" }
-          ]
-        },
-        {
-          name: "speaker",
-          icons: [
-            { status: "stopped", icon: "mdi-speaker-off" },
-            { status: "playing", icon: "mdi-speaker" },
-            { status: "paused", icon: "mdi-speaker" },
-          ]
-        },
-        {
-          name: "alarm",
-          icons: [
-            { status: "disarmed", icon: "mdi-shield-off" },
-            { status: "home", icon: "mdi-shield-home" },
-            { status: "armed", icon: "mdi-shield" },
-          ]
-        },
-        {
-          name: "oven",
-          icons: [
-            { status: "off", icon: "mdi-stove" },
-            { status: "on", icon: "mdi-stove" }
-          ]
-        },
-        {
-          name: "ac",
-          icons: [
-            { status: "off", icon: "mdi-air-conditioner" },
-            { status: "on", icon: "mdi-air-conditioner" }
-          ]
-        }
-      ]
+      deviceStates: this.$store.getters["deviceStates"]
     };
   },
 
@@ -80,8 +42,8 @@ export default {
       return !inactiveStates.includes(this.device.state.status);
     },
     icon() {
-      const type = this.icons.find(type => type.name == this.deviceType.name);
-      return type.icons.find(icon => icon.status == this.device.state.status).icon
+      const type = this.deviceStates.find(type => type.name == this.deviceType.name);
+      return type.states.find(state => state.status == this.device.state.status).icon
     }
   },
 

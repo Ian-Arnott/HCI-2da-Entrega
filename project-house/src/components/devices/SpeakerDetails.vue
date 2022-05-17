@@ -7,7 +7,7 @@
       {{device.state.song.artist}} -
       {{device.state.song.album}}
     </p>
-    <p v-else>Not playing anything</p>
+    <!-- <p v-else>Not playing anything</p> -->
     <v-row>
       <v-col>
         <v-select
@@ -21,7 +21,7 @@
       </v-col>
       <v-col>
         <v-btn large icon @click="prevSong()"><v-icon>mdi-skip-previous</v-icon></v-btn>
-        <v-btn large fab @click="playPause()"><v-icon large>{{ statusIcon }}</v-icon></v-btn>
+        <v-btn color="primary" large fab @click="playPause()"><v-icon large>{{ statusIcon }}</v-icon></v-btn>
         <v-btn large icon @click="nextSong()"><v-icon>mdi-skip-next</v-icon></v-btn>
       </v-col>
       <v-col>
@@ -35,22 +35,9 @@
           :prepend-icon="mediaIcon"
         ></v-slider>
       </v-col>
-      <v-col cols="12">
-        <v-slider
-          v-if="device.state.status != 'stopped'"
-          color="secondary"
-          track-color="secondary"
-          readonly
-          min="0"
-          :max="maxTime"
-          :value="timeValue">
-          <template v-slot:prepend>
-            <v-label>{{ device.state.song.progress }}</v-label>
-          </template>
-          <template v-slot:append>
+      <v-col cols="12" v-if="device.state.status != 'stopped'">
+            <v-label>{{ device.state.song.progress }} / </v-label>
             <v-label>{{ device.state.song.duration }}</v-label>
-          </template>
-        </v-slider>
       </v-col>
     </v-row>
   </v-container>
@@ -67,11 +54,7 @@ export default {
 
   data() {
     return {
-      states: [
-        { name: "stopped", icon: "mdi-speaker-off" },
-        { name: "playing", icon: "mdi-speaker" },
-        { name: "paused", icon: "mdi-speaker" },
-      ],
+      states: this.$store.getters['getDeviceStates']('speaker'),
       volume: this.device.state.volume,
       minVolume: 0,
       maxVolume: 10,
@@ -82,7 +65,7 @@ export default {
   computed: {
     icon() {
       const state = this.states.find(
-        (state) => state.name == this.device.state.status
+        (state) => state.status == this.device.state.status
       );
       return state ? state.icon : "mdi-speaker";
     },
@@ -115,11 +98,11 @@ export default {
 
   methods: {
     ...mapActions("devices", {
-      excute: "action",
+      execute: "action",
       getState: "getState",
     }),
     async stop() {
-      await this.excute({ id: this.device.id, actionName: 'stop' })
+      await this.execute({ id: this.device.id, actionName: 'stop' })
     },
     async playPause() {
       let action
@@ -134,31 +117,31 @@ export default {
           action = 'pause'
           break;
       }
-      await this.excute({ id: this.device.id, actionName: action })
+      await this.execute({ id: this.device.id, actionName: action })
       await this.updateStatus()
     },
     async prevSong() {
-      await this.excute({ id: this.device.id, actionName: "previousSong" })
+      await this.execute({ id: this.device.id, actionName: "previousSong" })
     },
     async nextSong() {
-      await this.excute({ id: this.device.id, actionName: "nextSong" })
+      await this.execute({ id: this.device.id, actionName: "nextSong" })
     },
     async setGenre() {
       console.log(this.genre)
-      await this.excute({ 
+      await this.execute({ 
         id: this.device.id, 
         actionName: "setGenre", 
         params: [this.genre.toLowerCase()] 
       })
     },
     async setVolume() {
-      await this.excute({ 
+      await this.execute({ 
         id: this.device.id, 
         actionName: "setVolume", 
         params: [this.volume] 
       })
     },
-    // para simular el slider de tiempo
+    // para simular el paso del tiempo
     async updateStatus() {
       try {
         const result = await this.getState(this.device.id)

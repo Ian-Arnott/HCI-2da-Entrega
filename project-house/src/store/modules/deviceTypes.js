@@ -23,13 +23,11 @@ export default {
         async getAll({ commit }) {
             const result = await DeviceTypeApi.get()
 
-            const ids = result.map(type => {
-                return {id: type.id, name: type.name}
-            })
+            // const ids = result.map(type => {
+            //     return {id: type.id, name: type.name}
+            // })
 
-            console.log(ids)
-
-            // logear los nombres de todas las acciones de cada tipo y ver que estado generan
+            // console.log(ids)
 
             commit('update', result)
             return result

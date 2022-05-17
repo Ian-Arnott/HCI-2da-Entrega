@@ -70,12 +70,8 @@
       <!-- State and Action fields -->
       <v-card-text v-else>
         <!-- {{ deviceState }} -->
-        <v-container v-if="device.type.name == 'speaker'">
-          <SpeakerDetails :device="device"/>
-        </v-container>
-        <v-container v-else-if="device.type.name == 'lamp'">
-          <LampDetails :device="device"/>
-        </v-container>
+        <SpeakerDetails v-if="device.type.name == 'speaker'" :device="device"/>
+        <LampDetails v-else-if="device.type.name == 'lamp'" :device="device"/>
       </v-card-text>
 
       <v-divider></v-divider>
