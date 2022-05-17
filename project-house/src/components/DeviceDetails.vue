@@ -72,6 +72,9 @@
         <!-- {{ deviceState }} -->
         <SpeakerDetails v-if="device.type.name == 'speaker'" :device="device"/>
         <LampDetails v-else-if="device.type.name == 'lamp'" :device="device"/>
+        <AlarmDetails v-else-if="device.type.name == 'alarm'" :device="device"/>
+        <OvenDetails v-else-if="device.type.name == 'oven'" :device="device"/>
+        <ACDetails v-else-if="device.type.name == 'ac'" :device="device"/>
       </v-card-text>
 
       <v-divider></v-divider>
@@ -88,11 +91,17 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
 import SpeakerDetails from "@/components/devices/SpeakerDetails"
 import LampDetails from "@/components/devices/LampDetails"
+import AlarmDetails from "@/components/devices/AlarmDetails"
+import OvenDetails from "@/components/devices/OvenDetails"
+import ACDetails from "@/components/devices/ACDetails"
 
 export default {
   components: {
     SpeakerDetails,
     LampDetails,
+    AlarmDetails,
+    OvenDetails,
+    ACDetails,
   },
 
   props: {

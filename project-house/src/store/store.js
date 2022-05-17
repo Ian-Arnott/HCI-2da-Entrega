@@ -34,9 +34,9 @@ export default new Vuex.Store({
       {
         name: "alarm",
         states: [
+          { status: "armedStay", icon: "mdi-shield-home" },
+          { status: "armedAway", icon: "mdi-shield-lock" },
           { status: "disarmed", icon: "mdi-shield-off" },
-          { status: "home", icon: "mdi-shield-home" },
-          { status: "armed", icon: "mdi-shield" },
         ]
       },
       {
@@ -69,6 +69,7 @@ export default new Vuex.Store({
     },
     'SET_SNACKBAR'(state, snackbar) {
       state.snackbar = snackbar
+      state.snackbar.color = snackbar.color ? snackbar.color : 'snackbarDefault'
     }
   },
   actions: {
