@@ -13,7 +13,9 @@
     <v-row justify="center">
       <v-dialog v-model="colorMenu" max-width="300px">
         <template v-slot:activator="{ attrs, on }">
-          <v-btn fab small :color="color" v-bind="attrs" v-on="on"></v-btn>
+          <v-btn fab small :color="color" v-bind="attrs" v-on="on">
+            <v-icon>mdi-eyedropper</v-icon>
+          </v-btn>
         </template>
 
         <v-card :ripple="false" id="colorPicker" @click="setColor()">
