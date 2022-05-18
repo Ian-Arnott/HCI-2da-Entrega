@@ -11,9 +11,35 @@
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <div class="js-disabled">
+        <h1>JavaScript Is Disabled</h1>
+        <p>This site can't work without JavaScript enabled</p>
+        <p>To enable JavaScript click 
+          <a href="https://support.google.com/admanager/answer/12654?hl=en" target="_blank">here</a>
+        </p>
+      </div>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>
+
+<style>
+body {
+  background-color: #b0bec5;
+}
+.js-disabled {
+  margin-top: 100px;
+  text-align: center;
+  font-family: 'Roboto';
+  font-size: large;
+}
+.js-disabled h1 {
+  color: #44692b;
+}
+.js-disabled a {
+  color: #44692b;
+  text-decoration: none;
+  font-weight: bold;
+}
+</style>
