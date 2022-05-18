@@ -9,23 +9,23 @@
       </p>
     </v-container>
 
-    <v-img v-if="loading" 
-          contain height="50px" 
-          :src="require('@/assets/ajax_loader.gif')" 
-          alt="loading"/>
-    <v-list v-else class="text-center">
-      <!-- One DeviceList per category -->
+    <!-- Progress Circle -->
+    <v-container v-if="loading" class="text-center">
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </v-container>
+
+    <!-- Devices -->
+    <v-list v-else-if="deviceCount != 0" class="text-center">
       <DeviceList
         v-for="type in deviceTypes"
         :key="type.id"
         :deviceType="type"
         :room="room"
       />
-
-      <!-- <p v-for="type in deviceTypes" :key="type.name">{{type}}</p> -->
     </v-list>
 
-    <v-container class="text-center" v-show="deviceCount == 0" fill-height>
+    <!-- Empty room -->
+    <v-container v-else class="text-center" fill-height>
       <v-col>
         <h1 class="display-1 my-2">Oops, this is empty</h1>
         <p>Click the button on the bottom right to add a device</p>
@@ -56,7 +56,7 @@ export default {
 
   data() {
     return {
-      loading: false
+      loading: false,
     };
   },
 
@@ -89,12 +89,11 @@ export default {
   async created() {
     try {
       this.loading = true;
-      // setTimeout(async () => {
       await this.getDevices();
-      this.loading = false;
-      // }, 1000)
     } catch (error) {
       console.error(error);
+    } finally {
+      this.loading = false;
     }
   },
 };

@@ -9,20 +9,13 @@
         </v-toolbar-title>
       </router-link>
 
-      <!-- Tabs -->
-      <template>
-        <v-tabs centered v-show="tabs" align-with-title>
-          <!-- <v-tab :to="{ name: 'Home' }">Home</v-tab>
-          <v-tab :to="{ name: 'Rooms' }">Rooms</v-tab>
-          <v-tab :to="{ name: 'Routines' }">Routines</v-tab> -->
-        </v-tabs>
-      </template>
+      <v-spacer></v-spacer>
 
       <!-- Notifications -->
-      <v-btn icon>
-        <v-icon>mdi-bell-outline</v-icon>
+      <!-- <v-btn disabled icon> -->
+        <!-- <v-icon>mdi-bell-outline</v-icon> -->
         <!-- <v-icon class="mr-4" >mdi-bell-ring</v-icon> --> 
-      </v-btn>
+      <!-- </v-btn> -->
       
       <!-- Language -->
       <v-menu open-on-hover v-model="language" bottom left offset-y transition="slide-y-transition">
