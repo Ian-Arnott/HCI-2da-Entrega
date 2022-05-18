@@ -79,10 +79,10 @@
       </v-card-text>
 
       <v-divider></v-divider>
-      <v-card-actions v-show="isEditing">
+      <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="closeDialog()">Close</v-btn>
-        <v-btn :disabled="!changed() || !valid" color="primary" @click="save">Save</v-btn>
+        <v-btn v-show="isEditing" :disabled="!changed() || !valid" color="primary" @click="save">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
