@@ -10,29 +10,18 @@
       </router-link>
 
       <v-spacer></v-spacer>
-
-      <!-- Notifications -->
-      <!-- <v-btn disabled icon> -->
-        <!-- <v-icon>mdi-bell-outline</v-icon> -->
-        <!-- <v-icon class="mr-4" >mdi-bell-ring</v-icon> --> 
-      <!-- </v-btn> -->
       
-      <!-- Language -->
-      <v-menu open-on-hover v-model="language" bottom left offset-y transition="slide-y-transition">
+      <!-- Help -->
+      <v-menu max-width="200" open-on-hover v-model="language" bottom left offset-y transition="slide-y-transition">
 
-        <!-- Activador del menu language-->
         <template v-slot:activator="{ on, attrs }">
           <v-btn small id="languageMenuButton" elevation="0" v-bind="attrs" v-on="on">
-            <v-icon>mdi-translate</v-icon>
-            <v-icon>mdi-menu-down</v-icon>
+            <v-icon>mdi-help-circle</v-icon>
           </v-btn>
         </template>
 
-        <!-- Opciones del menu language -->
         <v-list>
-          <v-subheader>Language</v-subheader>
-          <v-list-item>English</v-list-item>
-          <!-- <v-list-item disabled>Spanish</v-list-item> -->
+          <v-list-item>Press the '+' button to add a device, room, or routine</v-list-item>
         </v-list>
       </v-menu>
     </v-app-bar>

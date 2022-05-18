@@ -16,6 +16,7 @@
       </v-card-title>
       <v-card-text>
         <v-form v-model="valid" @submit.prevent>
+          <!--Routine Name-->
           <v-row>
             <v-col>
               <v-text-field
@@ -35,11 +36,11 @@
             </v-col>
           </v-row>
           <v-container>
-            <v-list-item v-for="(action, index) in actions" :key="action">
+            <v-list-item v-for="(action, index) in routineDevices" :key="action">
             <v-row>
               <v-col>
                 <v-select
-                v-model="actions[index]"
+                v-model="routineDevices[index]"
                 :rules="deviceRules"
                 :items="devices"
                 item-text="name"
@@ -47,9 +48,20 @@
                 required
                 ></v-select>
               </v-col>
-              <v-col v-if="actions[index]!=''">
+              <v-col v-if="routineDevices[index]!=''">
                 <v-select
+                v-model="actions[index]"
+                :rules="actionRules"
+                :items="devices"
+                item-text="name"
+                label="Action"
+                required
                 ></v-select>
+              </v-col>
+              <v-col v-if="actions[index]!=''">
+                <v-text-field
+                v-model="parameters[index]"
+                ></v-text-field>
               </v-col>
               <v-col>
                 <v-btn icon @click="removeAction(index)" outlined>
@@ -80,15 +92,16 @@ import { mapState } from "vuex";
 
 
 export default {
-    computed: {
+  computed: {
     ...mapState("devices", {
       devices: (state) => state.devices,
     }),
   },
   data() {
     return {
+      routineDevices: [],
       actions: [],
-      valid: false,
+      parameters: [],
       name: "",
       minChars: 3,
       maxChars: 20,
@@ -100,12 +113,14 @@ export default {
       ],
       type: "",
       deviceRules: [(v) => !!v || "Device is required"],
+      actionRules: [(v) => !!v || "Action is required"],      
       types: [
         { name: "Kitchen", img: "kitchen.jpeg" },
         { name: "Bedroom", img: "bedroom.jpeg" },
         { name: "Living Room", img: "living-room.jpg" },
         { name: "Other", img: "empty-room.jpg" },
       ],
+      valid: false,
       opened: false,
       title: "Add Routine",
       icon: "mdi-timeline-text",
@@ -117,14 +132,23 @@ export default {
   },
   methods: {
     addAction() {
+      this.routineDevices.push("")
       this.actions.push("")
+      this.parameters.push("")
+
     },
     removeAction(index) {
+      this.routineDevices.splice(index, 1)
       this.actions.splice(index, 1)
+      this.parameters.splice(index, 1)
+
     },
-    
 
     closeDialog() {
+      this.routineDevices.splice(0,this.routineDevices.length)
+      this.actions.splice(0,this.actions.length)
+      this.parameters.splice(0,this.parameters.length)
+      this.name = ""
       this.opened = false;
       this.$emit('dialogClosed')
     }
