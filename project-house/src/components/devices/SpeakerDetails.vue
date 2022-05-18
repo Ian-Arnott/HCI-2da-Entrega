@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-icon size="100px" @click="stop()">{{ icon }}</v-icon>
+    <v-icon size="100px">{{ icon }}</v-icon>
     <p>{{ device.state.status }}</p>
     <p v-if="device.state.status != 'stopped'">
       {{device.state.song.title}} by
@@ -36,8 +36,8 @@
         ></v-slider>
       </v-col>
       <v-col cols="12" v-if="device.state.status != 'stopped'">
-            <v-label>{{ device.state.song.progress }} / </v-label>
-            <v-label>{{ device.state.song.duration }}</v-label>
+        <v-label>{{ device.state.song.progress }} / {{ device.state.song.duration }}</v-label>
+        <v-btn class="mb-1" large icon color="primary" @click="stop()"><v-icon large>mdi-stop-circle</v-icon></v-btn>
       </v-col>
     </v-row>
   </v-container>
