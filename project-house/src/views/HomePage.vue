@@ -35,6 +35,6 @@
 <script>
 
 export default {
-
+  title: 'Home - Project House'
 };
 </script>

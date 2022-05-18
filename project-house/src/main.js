@@ -4,6 +4,10 @@ import store from './store/store'
 import router from './plugins/router'
 import vuetify from './plugins/vuetify'
 
+import titleMixin from './titleMixin'
+
+Vue.mixin(titleMixin)
+
 Vue.config.productionTip = false
 
 new Vue({
@@ -20,3 +24,4 @@ new Vue({
     })
   }
 }).$mount('#app')
+

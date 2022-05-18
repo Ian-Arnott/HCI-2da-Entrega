@@ -40,6 +40,10 @@ import DeviceList from "@/components/DeviceList";
 import BackButton from "../components/BackButton.vue";
 
 export default {
+  title() {
+    return `${this.slug} - Project House`
+  },
+
   name: "RoomDetails",
 
   components: {

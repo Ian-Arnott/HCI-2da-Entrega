@@ -18,6 +18,8 @@
 <script>
 import RoutineCard from "../components/RoutineCard.vue";
 export default {
+  title: 'Routines - Project House',
+  
   components: { RoutineCard },
   name: "RoutinesPage",
 
