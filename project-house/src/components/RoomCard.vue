@@ -14,7 +14,7 @@
     />
 
     <v-card-actions>
-      <v-dialog v-model="editMenu" max-width="600px">
+      <v-dialog v-model="editMenu" max-width="600px" @click:outside="closeDialog()">
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
@@ -29,6 +29,7 @@
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </template>
+
         <!-- Dialog content -->
         <v-card class="text-center overflow-hidden" max-width="600px">
           <v-toolbar flat>
@@ -60,6 +61,43 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
+
+          <!-- Edit fields -->
+          <v-card-text class="mt-2">
+            <v-form v-model="valid" @submit.prevent>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    v-model="newRoomName"
+                    :rules="nameRules"
+                    :counter="maxChars"
+                    :placeholder="room.name"
+                    persistent-placeholder
+                    color="secondary"
+                    label="Room name"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-autocomplete
+                    v-model="newRoomType"
+                    :items="types"
+                    item-text="name"
+                    :placeholder="room.meta.type"
+                    persistent-placeholder
+                    color="secondary"
+                    label="Room type"
+                  ></v-autocomplete>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-card-text>
+
+          <v-divider></v-divider>
+          <v-card-actions >
+            <v-spacer></v-spacer>
+            <v-btn text @click="closeDialog()">Close</v-btn>
+            <v-btn :disabled="!canSave() || !valid" color="primary" @click="editRoom()">Save</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-card-actions>
@@ -87,6 +125,21 @@ export default {
       editMenu: false,
       confirmMenu: false,
       deleteOption: undefined,
+
+      //  edit form data
+      valid: false,
+      newRoomName: "",
+      minChars: 3,
+      maxChars: 20,
+      nameRules: [
+        (v) => /^$|^[\w ]+$/.test(v) || "Invalid character",
+        (v) => (v.length == 0 || (v.length >= this.minChars && v.length <= this.maxChars)) ||
+          `Room name must be between ${this.minChars}-${this.maxChars} characters`,
+        (v) => !/^[\s]+$/.test(v) || "Invalid room name",
+        (v) => !/^All Devices$/.test(v) || "Invalid room name",
+      ],
+      newRoomType: "",
+      types: this.$store.getters["rooms/getRoomTypes"],
     };
   },
   computed: {
@@ -100,10 +153,50 @@ export default {
   methods: {
     ...mapActions("rooms", {
       $deleteRoom: "delete",
+      $editRoom: "edit",
     }),
     ...mapActions("devices", {
       deleteDevice: "delete"
     }),
+    canSave() {
+      return this.newRoomName != "" || (this.newRoomType && this.newRoomType != "");
+    },
+    closeDialog() {
+      this.editMenu = false
+      this.newRoomName = ""
+      this.newRoomType = ""
+    },
+    async editRoom() {
+      const name = this.newRoomName != "" ? this.newRoomName : this.room.name
+      const type = (this.newRoomType && this.newRoomType != "") ? this.newRoomType : this.room.meta.type
+      const img = this.types.find((t) => t.name == type).img;
+
+      let snackbar = { show: true, text: "" }
+
+      try {
+        await this.$editRoom({ 
+          id: this.room.id, 
+          name: name, 
+          meta: {
+            img: img,
+            type: type,
+          } 
+        })
+        this.closeDialog()
+        snackbar.text = "Room updated successfully";
+      } catch (error) {
+        switch (error.code) {
+          case 2:
+            snackbar.text = "Room already exists";
+            break;
+          default:
+            snackbar.text = "Unexpecter error";
+            console.error(error)
+        }
+      } finally {
+        this.$store.dispatch('setSnackbar', snackbar)
+      }
+    },
     async deleteRoom() {
       let snackbar = {show: true, text: ""}
       console.log(this.deleteOption)
@@ -125,7 +218,7 @@ export default {
       try {
         const result = await this.$deleteRoom(this.room.id)
         console.log(result)
-        snackbar.text = "Room deleted succesfully"
+        snackbar.text = "Room deleted successfully"
       } catch (error) {
         console.error(error)
         snackbar.text = "There was an error deleting the room"

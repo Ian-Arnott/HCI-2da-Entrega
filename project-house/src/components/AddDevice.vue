@@ -156,7 +156,7 @@ export default {
           console.log('Link device to room:', result)
         }
         this.closeDialog()
-        this.snackbar.text = "Device created succesfully"
+        this.snackbar.text = "Device created successfully"
       } catch (error) {
         switch (error.code) {
           case 1:

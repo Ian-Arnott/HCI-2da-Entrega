@@ -14,7 +14,7 @@ class RoomApi {
     }
 
     static async modify(room) {
-        return await Api.put(RoomApi.getUrl(room.id), room)
+        return await Api.put(RoomApi.getUrl(room.id), { name: room.name, meta: room.meta })
     }
 
     static async delete(id) {

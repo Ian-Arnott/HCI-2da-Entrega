@@ -226,7 +226,7 @@ export default {
       this.loading = false;
 
       if (result) {
-        snackbar.text = "Security code changed succesfully";
+        snackbar.text = "Security code changed successfully";
         this.changePasswordMenu = false;
       } else snackbar.text = "Wrong Code";
 

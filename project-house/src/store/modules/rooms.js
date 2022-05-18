@@ -5,8 +5,15 @@ export default {
 
     state: {
         rooms: [],
+        roomTypes: [
+            { name: "Kitchen", img: "kitchen.jpeg" },
+            { name: "Bedroom", img: "bedroom.jpeg" },
+            { name: "Living Room", img: "living-room.jpg" },
+            { name: "Other", img: "empty-room.jpg" },
+        ],
     },
     getters: {
+        getRoomTypes: state => state.roomTypes,
         getRoomBySlug: (state) => (slug) => {
             return state.rooms.find(room => room.slug == slug);
         },
@@ -62,8 +69,8 @@ export default {
                 id: "all-devices",
                 name: "All Devices",
                 meta: {
-                    deviceCount: rootState.devices.devices.length, 
-                    activeDeviceCount: activeDeviceCount, 
+                    deviceCount: rootState.devices.devices.length,
+                    activeDeviceCount: activeDeviceCount,
                     editable: false,
                     img: 'home.jpg',
                 }

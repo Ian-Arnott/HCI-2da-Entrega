@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="menu" max-width="600px">
+  <v-dialog v-model="menu" max-width="600px" @click:outside="closeDialog()">
     <template v-slot:activator="{ on, attrs }">
       <v-btn icon absolute right @click.stop v-bind="attrs" v-on="on">
         <v-icon>mdi-dots-vertical</v-icon>
@@ -10,7 +10,8 @@
     <v-card class="text-center overflow-hidden" max-width="600px">
       <v-toolbar flat>
         <!-- <v-icon>mdi-lightbulb</v-icon> -->
-        <v-toolbar-title class="text-h5">{{ device.name }}{{ roomName }}</v-toolbar-title>
+        <v-toolbar-title v-if="isEditing" class="text-h5">Edit {{ device.name }}{{ roomName }}</v-toolbar-title>
+        <v-toolbar-title v-else class="text-h5">{{ device.name }}{{ roomName }}</v-toolbar-title>
         <v-spacer></v-spacer>
         
         <!-- Edit button -->
@@ -80,7 +81,7 @@
       <v-divider></v-divider>
       <v-card-actions v-show="isEditing">
         <v-spacer></v-spacer>
-        <v-btn text @click="menu=false">Close</v-btn>
+        <v-btn text @click="closeDialog()">Close</v-btn>
         <v-btn :disabled="!changed() || !valid" color="primary" @click="save">Save</v-btn>
       </v-card-actions>
     </v-card>
@@ -163,7 +164,7 @@ export default {
 
   methods: {
     changed() {
-      return this.roomPicked != "" || this.newDeviceName != "";
+      return (this.roomPicked && this.roomPicked != "") || this.newDeviceName != "";
     },
     ...mapActions("devices", {
       editDevice: "edit",
@@ -211,12 +212,19 @@ export default {
         }
       }
 
-      this.$store.dispatch("setSnackbar", { show: true, text: "The device has been updated" })
+      this.$store.dispatch("setSnackbar", { show: true, text: "Device updated successfully" })
 
       this.isEditing = !this.isEditing;
-      this.menu = false
+      this.clear()
     },
-
+    clear() {
+      this.newDeviceName = ""
+      this.roomPicked = ""
+    },
+    closeDialog() {
+      this.menu = false
+      this.clear()
+    },
     async deleteDevice() {
       try{
         await this.$deleteDevice(this.device.id)

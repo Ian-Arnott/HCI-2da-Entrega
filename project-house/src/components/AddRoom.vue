@@ -69,12 +69,7 @@ export default {
       ],
       type: "",
       typeRules: [(v) => !!v || "Room type is required"],
-      types: [
-        { name: "Kitchen", img: "kitchen.jpeg" },
-        { name: "Bedroom", img: "bedroom.jpeg" },
-        { name: "Living Room", img: "living-room.jpg" },
-        { name: "Other", img: "empty-room.jpg" },
-      ],
+      types: this.$store.getters["rooms/getRoomTypes"],
       opened: false,
       title: "Add Room",
       icon: "mdi-bed",
@@ -91,7 +86,7 @@ export default {
     }),
     async addRoom() {
       const img = this.types.find((type) => type.name == this.type).img;
-      let room = new Room(null, this.name, { img: img });
+      let room = new Room(null, this.name, { img: img, type: this.type });
 
       try {
         room = await this.$addRoom(room);
@@ -99,7 +94,7 @@ export default {
 
         console.log(room);
         this.closeDialog()
-        this.snackbar.text = "Room created succesfully";
+        this.snackbar.text = "Room created successfully";
       } catch (error) {
         switch (error.code) {
           case 1:
@@ -119,6 +114,8 @@ export default {
     },
     closeDialog() {
       this.opened = false;
+      this.type = ""
+      this.name = ""
       this.$emit('dialogClosed')
     }
   },
