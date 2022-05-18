@@ -12,7 +12,10 @@
     <v-list>
       <AddDevice @dialogClosed="menu = false"/>
       <AddRoom @dialogClosed="menu = false"/>
-      <AddRoutine @dialogClosed="menu = false"/>
+      <v-list-item :to="{ name: 'CreateRoutine' }">
+        <v-icon class="mr-4">mdi-timeline-text</v-icon>
+        <v-list-item-title>Create Routine</v-list-item-title>
+      </v-list-item>
     </v-list>
   </v-menu>
 </template>
@@ -20,10 +23,12 @@
 <script>
 import AddDevice from './AddDevice.vue'
 import AddRoom from './AddRoom.vue'
-import AddRoutine from './AddRoutine.vue'
 
 export default {
-  components: { AddDevice, AddRoom, AddRoutine },
+  components: { 
+    AddDevice, 
+    AddRoom, 
+  },
   name: "AddButton",
 
   data() {
