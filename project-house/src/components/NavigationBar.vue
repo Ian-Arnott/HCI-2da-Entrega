@@ -16,7 +16,7 @@
 
         <template v-slot:activator="{ on, attrs }">
           <v-btn small id="languageMenuButton" elevation="0" v-bind="attrs" v-on="on">
-            <v-icon>mdi-help-circle</v-icon>
+            <v-icon>mdi-help-circle-outline</v-icon>
           </v-btn>
         </template>
 

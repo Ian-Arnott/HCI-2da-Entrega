@@ -91,11 +91,11 @@ export default {
             mode: this.device.state.mode,
             modes: ["Fan", "Heat", "Cold"],
             verticalSwing: this.device.state.verticalSwing,
-            verticalModes: ["Auto", "22", "45", "67", "90"],
+            verticalModes: ["Auto", "22°", "45°", "67°", "90°"],
             horizontalSwing: this.device.state.horizontalSwing,
-            horizontalModes: ["Auto", "-90", "-45", "0", "45", "90"],
+            horizontalModes: ["Auto", "-90°", "-45°", "0°", "45°", "90°"],
             speed: this.device.state.fanSpeed,
-            speedModes: ["Auto", "25", "50", "75", "100"],
+            speedModes: ["Auto", "25%", "50%", "75%", "100%"],
         };
     },
     
