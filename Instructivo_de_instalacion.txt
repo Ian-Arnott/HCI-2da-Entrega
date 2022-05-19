@@ -1,0 +1,12 @@
+Instructivo PROJECT HOUSE
+
+Requisitos previos:
+1. Node.JS v16.15 o mayor
+2. npm v8.5.5 o mayor
+3. tener la API provista instalada y corriendo
+
+Pasos para instalación y ejecucion:
+1. extraer el archivo projectHouse_grupo3.zip
+2. ubicarse en el direcorio ./dist
+3. en la terminal, ubicado en el directorio actual, correr 
+npm run serve
