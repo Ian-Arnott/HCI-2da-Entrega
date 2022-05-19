@@ -33,7 +33,7 @@
                 <v-icon class="mr-4">mdi-check</v-icon>
                 <v-list-item-title>Run</v-list-item-title>
               </v-list-item>
-              <v-list-item disabled>
+              <v-list-item :to="{ name: 'RoutineDetails', params: { slug: routine.name } }">
                 <v-icon class="mr-4">mdi-mail</v-icon>
                 <v-list-item-title>Details</v-list-item-title>
               </v-list-item>
@@ -113,89 +113,6 @@ export default {
     closeDeleteConfirmation() {
       this.deleteMenu = false
       this.contextMenu = false
-    },
-    getActionName(action) {
-      let actionName;
-      let deviceName = action.device.name;
-      let roomName = action.device.room ? action.device.room.name : "";
-      let paramName = action.params[0] ? action.params[0] : "";
-      let unit = "";
-      switch (action.actionName) {
-        case "turnOn":
-          actionName = "Turn on";
-          break;
-        case "turnOff":
-          actionName = "Turn off";
-          break;
-        case "setMode":
-          actionName = "Set";
-          break;
-        case "setTemperature":
-          actionName = "Set";
-          unit = "°C";
-          break;
-        // ac
-        case "setVerticalSwing":
-          actionName = "Set vertical swing";
-          break;
-        case "setHorizontalSwing":
-          actionName = "Set horizontal swing";
-          break;
-        case "setFanSpeed":
-          actionName = "Set fan speed";
-          break;
-        // light
-        case "setBrightness":
-          actionName = "Set brightness";
-          unit = "%";
-          break;
-        case "setColor":
-          actionName = "Set color";
-          break;
-        // speaker
-        case "play":
-          actionName = "Play";
-          break;
-        case "stop":
-          actionName = "Stop";
-          break;
-        case "pause":
-          actionName = "Pause";
-          break;
-        case "resume":
-          actionName = "Resume";
-          break;
-        case "setGenre":
-          actionName = "Set music genre";
-          break;
-        case "setVolume":
-          actionName = "Set volume";
-          break;
-        case "nextSong":
-          actionName = "Skip a track";
-          break;
-        case "previousSong":
-          actionName = "Go back";
-          break;
-        // oven
-        case "setConvection":
-          actionName = "Set convection mode";
-          break;
-        case "setGrill":
-          actionName = "Set grill mode";
-          break;
-        case "setHeat":
-          actionName = "Set heat mode";
-          break;
-        default:
-          actionName = "no se que paso";
-          break;
-      }
-
-      actionName = `${actionName} '${deviceName}' ${
-        roomName ? `(${roomName})` : ""
-      } ${paramName ? `to ${paramName} ${unit ? unit : ""}` : ""}`;
-      return actionName;
     },
   },
 };

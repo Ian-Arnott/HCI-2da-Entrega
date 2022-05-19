@@ -7,7 +7,9 @@ export default {
         routines: []
     },
     getters: {
-
+        getRoutineByName: (state) => (name) => {
+            return state.routines.find(routine => routine.name == name)
+        }
     },
     mutations: {
         setRoutines(state, routines) {
