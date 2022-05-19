@@ -57,6 +57,25 @@ const routes = [
         component: () => import(/* webpackChunkName: "create-routine" */"@/views/CreateRoutinePage"),
     },
 
+    // rutas dinamicas para rutinas
+    {
+        path: '/routines/:slug',
+        name: 'RoutineDetails',
+        component: () => import(/* webpackChunkName: "routine-details" */"@/views/RoutineDetails"),
+        props: true,
+        beforeEnter: (to, from, next) => {
+
+            // hay que llamar a la api y setear el store de nuevo porque cuando 
+            // se refreshea la pagina (f5) se pierde el estado
+            store.dispatch('routines/getAll').then(() => {
+                const exists = store.getters['routines/getRoutineByName'](to.params.slug);
+
+                if (exists) next()
+                else next({ name: 'NotFound' })
+            })
+        }
+    },
+
     // Default route (not found)
     {
         path: '/404',

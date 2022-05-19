@@ -17,11 +17,11 @@
         <v-list-item-content>
           <v-list-item-title>{{ routine.name }}</v-list-item-title>
           <v-list-item-subtitle
-            >{{ routine.actions.length }} actions</v-list-item-subtitle
+            >{{ routine.actions.length + `${routine.actions.length != 1 ? ' actions' : ' action'}` }}</v-list-item-subtitle
           >
         </v-list-item-content>
         <v-list-item-action>
-          <v-menu>
+          <v-menu v-model="contextMenu">
             <template v-slot:activator="{ on }">
               <v-btn v-show="routineHovered" absolute top right icon v-on="on">
                 <v-icon>mdi-dots-vertical</v-icon>
@@ -33,14 +33,30 @@
                 <v-icon class="mr-4">mdi-check</v-icon>
                 <v-list-item-title>Run</v-list-item-title>
               </v-list-item>
-              <v-list-item disabled>
-                <v-icon disabled class="mr-4">mdi-pencil</v-icon>
-                <v-list-item-title>Edit</v-list-item-title>
+              <v-list-item :to="{ name: 'RoutineDetails', params: { slug: routine.name } }">
+                <v-icon class="mr-4">mdi-mail</v-icon>
+                <v-list-item-title>Details</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="deleteRoutine()">
-                <v-icon class="mr-4">mdi-delete</v-icon>
-                <v-list-item-title>Delete</v-list-item-title>
-              </v-list-item>
+              <!-- Delete confirmation dialog -->
+              <v-dialog v-model="deleteMenu" max-width="300px">
+                <template v-slot:activator="{ attrs, on}">
+                  <v-list-item v-bind="attrs" v-on="on">
+                    <v-icon class="mr-4">mdi-delete</v-icon>
+                    <v-list-item-title>Delete</v-list-item-title>
+                    </v-list-item>
+                </template>
+
+                <v-card dark color="warning">
+                  <v-card-title>Delete Confirmation</v-card-title>
+                  <v-card-text>Are you sure you want to delete {{routine.name}}?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn text @click="closeDeleteConfirmation()">cancel</v-btn>
+                    <v-btn text @click="deleteRoutine()">delete</v-btn>
+                  </v-card-actions>
+                </v-card>
+
+              </v-dialog>
             </v-list>
           </v-menu>
         </v-list-item-action>
@@ -61,6 +77,8 @@ export default {
   data() {
     return {
       routineHovered: false,
+      contextMenu : false,
+      deleteMenu: false
     };
   },
 
@@ -90,89 +108,11 @@ export default {
         console.error(error);
       }
       this.$store.dispatch("setSnackbar", snackbar);
+      this.closeDeleteConfirmation()
     },
-    getActionName(action) {
-      let actionName;
-      let deviceName = action.device.name;
-      let roomName = action.device.room ? action.device.room.name : "";
-      let paramName = action.params[0] ? action.params[0] : "";
-      let unit = "";
-      switch (action.actionName) {
-        case "turnOn":
-          actionName = "Turn on";
-          break;
-        case "turnOff":
-          actionName = "Turn off";
-          break;
-        case "setMode":
-          actionName = "Set";
-          break;
-        case "setTemperature":
-          actionName = "Set";
-          unit = "°C";
-          break;
-        // ac
-        case "setVerticalSwing":
-          actionName = "Set vertical swing";
-          break;
-        case "setHorizontalSwing":
-          actionName = "Set horizontal swing";
-          break;
-        case "setFanSpeed":
-          actionName = "Set fan speed";
-          break;
-        // light
-        case "setBrightness":
-          actionName = "Set brightness";
-          unit = "%";
-          break;
-        case "setColor":
-          actionName = "Set color";
-          break;
-        // speaker
-        case "play":
-          actionName = "Play";
-          break;
-        case "stop":
-          actionName = "Stop";
-          break;
-        case "pause":
-          actionName = "Pause";
-          break;
-        case "resume":
-          actionName = "Resume";
-          break;
-        case "setGenre":
-          actionName = "Set music genre";
-          break;
-        case "setVolume":
-          actionName = "Set volume";
-          break;
-        case "nextSong":
-          actionName = "Skip a track";
-          break;
-        case "previousSong":
-          actionName = "Go back";
-          break;
-        // oven
-        case "setConvection":
-          actionName = "Set convection mode";
-          break;
-        case "setGrill":
-          actionName = "Set grill mode";
-          break;
-        case "setHeat":
-          actionName = "Set heat mode";
-          break;
-        default:
-          actionName = "no se que paso";
-          break;
-      }
-
-      actionName = `${actionName} '${deviceName}' ${
-        roomName ? `(${roomName})` : ""
-      } ${paramName ? `to ${paramName} ${unit ? unit : ""}` : ""}`;
-      return actionName;
+    closeDeleteConfirmation() {
+      this.deleteMenu = false
+      this.contextMenu = false
     },
   },
 };
