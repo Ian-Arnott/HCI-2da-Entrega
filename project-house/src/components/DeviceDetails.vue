@@ -30,7 +30,8 @@
 
           <v-card dark color="warning">
             <v-card-title>Delete Confirmation</v-card-title>
-            <v-card-text>Are you sure you want to delete "{{device.name}}"</v-card-text>
+            <v-card-text>Are you sure you want to delete "{{device.name}}"?</v-card-text>
+            <v-card-text class="font-weight-bold">All associated routines will also be deleted</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn text @click="confirmMenu = false">Cancel</v-btn>
@@ -71,11 +72,11 @@
       <!-- State and Action fields -->
       <v-card-text v-else>
         <!-- {{ deviceState }} -->
-        <SpeakerDetails v-if="device.type.name == 'speaker'" :device="device"/>
-        <LampDetails v-else-if="device.type.name == 'lamp'" :device="device"/>
-        <AlarmDetails v-else-if="device.type.name == 'alarm'" :device="device"/>
-        <OvenDetails v-else-if="device.type.name == 'oven'" :device="device"/>
-        <ACDetails v-else-if="device.type.name == 'ac'" :device="device"/>
+        <SpeakerDetails v-if="device.type.name == 'speaker'" :device="device" @action="executeAction"/>
+        <LampDetails v-else-if="device.type.name == 'lamp'" :device="device" @action="executeAction"/>
+        <AlarmDetails v-else-if="device.type.name == 'alarm'" :device="device" @action="executeAction"/>
+        <OvenDetails v-else-if="device.type.name == 'oven'" :device="device" @action="executeAction"/>
+        <ACDetails v-else-if="device.type.name == 'ac'" :device="device" @action="executeAction"/>
       </v-card-text>
 
       <v-divider></v-divider>
@@ -133,12 +134,14 @@ export default {
   computed: {
     roomName() {
       let roomName = ""
-      console.log(this.device)
       if (this.device.room) roomName = " - " + this.device.room.name
       return roomName
     },
     ...mapState("rooms", {
       rooms: (state) => state.rooms,
+    }),
+    ...mapState("routines", {
+      routines: (state) => state.routines,
     }),
     ...mapGetters("rooms", {
       getRoomByName: "getRoomByName",
@@ -168,6 +171,7 @@ export default {
     },
     ...mapActions("devices", {
       editDevice: "edit",
+      $executeAction: "action",
       $deleteDevice: "delete",
       getDeviceState: "getState",
     }),
@@ -178,7 +182,6 @@ export default {
     async save() {
       // cambio de nombre
       if(this.newDeviceName != "") {
-        console.log('new name:', this.newDeviceName)
         try {
           await this.editDevice({ 
             id: this.device.id, 
@@ -225,10 +228,33 @@ export default {
       this.menu = false
       this.clear()
     },
+    ...mapActions("routines", {
+      deleteRoutine: "delete",
+    }),
     async deleteDevice() {
+      // delete associated routines
+      try {
+        let routinesToDelete = []
+        this.routines.forEach(routine => {
+          let shouldDelete = false
+          routine.actions.forEach(action => {
+            if (action.device.id == this.device.id) shouldDelete = true
+          })
+          if (shouldDelete) routinesToDelete.push(routine)
+        });
+
+        for (let i = 0; i < routinesToDelete.length; i++) {
+          const routine = routinesToDelete[i];
+          console.log('Deleting routine', routine.name)     
+          await this.deleteRoutine(routine.id)     
+        }
+      } catch (error) {
+        console.error(error)
+      }
+
+      // delete device
       try{
         await this.$deleteDevice(this.device.id)
-        console.log("Device deleted");
         this.menu = false
         this.confirmMenu = false
         this.$store.dispatch("setSnackbar", { show: true, text: "Device deleted" })
@@ -236,6 +262,30 @@ export default {
         console.error(error)
       }
     },
+
+    // Api call generica y centralizada
+    async executeAction(data) {
+      // console.log('Llamada al api')
+      try {
+        const result = await this.$executeAction(data)
+        console.log('Result', result)
+
+        if(this.device.type.name == 'speaker') await this.updateStatus()
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    // para simular el paso del tiempo
+    async updateStatus() {
+      try {
+        const result = await this.getDeviceState(this.device.id)
+        if (result.status == "playing") {
+          setTimeout(this.updateStatus, 1000)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
   },
   async created() {
     try {

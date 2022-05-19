@@ -30,17 +30,17 @@ export default {
             dispatch('getAll')
             return result
         },
-        async edit({ dispatch },routine) {
+        async edit({ dispatch }, routine) {
             const result = await RoutineApi.edit(routine)
             dispatch('getAll')
             return result
         },
-        async delete({ dispatch },id) {
+        async delete({ dispatch }, id) {
             const result = await RoutineApi.delete(id)
             dispatch('getAll')
             return result
         },
-        async execute({ dispatch },id) {
+        async execute({ dispatch }, id) {
             const result = await RoutineApi.execute(id)
             dispatch('devices/getAll', null, { root: true })
             return result

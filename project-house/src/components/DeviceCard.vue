@@ -20,6 +20,7 @@
 
 <script>
 import DeviceDetails from "@/components/DeviceDetails.vue";
+import { mapActions } from 'vuex';
 
 export default {
   components: { DeviceDetails },
@@ -31,15 +32,16 @@ export default {
   data() {
     return {
       hovered: false,
-      deviceStates: this.$store.getters["deviceStates"]
+      deviceStates: this.$store.getters["deviceStates"],
+      inactiveStates: ['off', 'stopped', 'paused', 'disarmed'],
+
     };
   },
 
   computed: {
     isActive() {
       console.log(`${this.device.name}: ${this.device.state.status}`);
-      const inactiveStates = ['off', 'stopped', 'paused', 'disarmed']
-      return !inactiveStates.includes(this.device.state.status);
+      return !this.inactiveStates.includes(this.device.state.status);
     },
     icon() {
       const type = this.deviceStates.find(type => type.name == this.deviceType.name);
@@ -48,23 +50,45 @@ export default {
   },
 
   methods: {
-    switchDeviceState() {
-      const newState = this.device.state > 0 ? 0 : 1;
+    ...mapActions("devices", {
+      execute: "action",
+    }),
+    async switchDeviceState() {
+      // todo habria que impedir el click y sacar el switch en device list
+      if (this.device.type.name == 'alarm') return
       
-      console.log(newState)
+      let action
+      switch (this.device.state.status) {
+        case 'off':
+          action = 'turnOn'
+          break;
+        case 'on':
+          action = 'turnOff'
+          break;
+        case 'stopped':
+          action = 'play'
+          break
+        case 'paused':
+          action = 'resume'
+          break
+        case 'playing':
+          action = 'stop'
+          break
+        default:
+          console.log('No deberia estar aca')
+          break;
+      }
 
-      // api.setDeviceState(
-      //   this.device.id,
-      //   newState,
-      //   () => {
-      //     let data = { deviceId: this.device.id, newState: newState };
-      //     store.commit("setDeviceState", data);
-      //     this.$emit("switched");
-      //   },
-      //   () => {
-      //     console.error("Api error");
-      //   }
-      // );
+      try {
+        const result =  await this.execute({
+          id: this.device.id,
+          actionName: action,
+        })
+        console.log(result)
+        this.$emit("switched");
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     setDeviceState(state) {

@@ -79,4 +79,13 @@ const router = new VueRouter({
 //     else next()
 // })
 
+router.beforeEach((to, from, next) => {
+    if (to.name)
+        store.dispatch('setLoading', true)
+    next()
+})
+router.afterEach(() => {
+    store.dispatch('setLoading', false)
+})
+
 export default router

@@ -8,7 +8,7 @@
       <v-subheader>{{ deviceTypeName }}</v-subheader>
       <v-switch
         v-model="selectAll"
-        v-show="listHovered || selectAll"
+        v-show="canSwitch()"
         class="pa-0 ma-0"
         :id="`switch-${deviceType}`"
       >
@@ -140,12 +140,22 @@ export default {
       } else this.selected.push(deviceId.toString());
     },
     isActive(device) {
-      const inactiveStates = ['off', 'stopped', 'disarmed']
+      const inactiveStates = ['off', 'stopped', 'paused', 'disarmed']
       return !inactiveStates.includes(device.state.status);
     },
     ...mapActions("devices", {
       executeAction: "action"
-    })
+    }),
+    canSwitch() {
+      if(this.deviceType.name != 'lamp') return false
+      return this.listHovered || this.selectAll
+    },
+    execute() {
+      //
+      //
+      //
+      //
+    }
   },
 
   created() {

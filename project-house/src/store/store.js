@@ -10,6 +10,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loading: false,
     connected: navigator.onLine, // variable del navegador
     snackbar: {
       show: false,
@@ -61,6 +62,7 @@ export default new Vuex.Store({
     ]
   },
   getters: {
+    loading: state => state.loading,
     connected: state => state.connected,
     snackbar: state => state.snackbar,
     deviceStates: state => state.deviceStates,
@@ -72,6 +74,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    'SET_LOADING'(state, loading) {
+      state.loading = loading
+    },
     'SET_CONNECTED'(state, payload) {
       state.connected = payload
     },
@@ -81,6 +86,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setLoading({ commit }, loading) {
+      commit('SET_LOADING', loading)
+    },
     setConnected({ commit }, payload) {
       commit('SET_CONNECTED', payload)
     },

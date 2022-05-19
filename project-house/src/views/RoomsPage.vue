@@ -67,7 +67,7 @@ export default {
         case 100:
         case 101:
           this.error =
-            "Unable to establish connection with the server, pleasetry again later";
+            "Unable to establish connection with the server, please try again later";
           break;
         default:
           this.error = "Connection to server failed, please try again later";

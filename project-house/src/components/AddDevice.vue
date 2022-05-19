@@ -149,11 +149,9 @@ export default {
         device = await this.$addDevice(device)
         device = Object.assign(new Device(), device)
 
-        console.log(device)
         if(this.newDevice.room) {
           const room = this.getRoomByName(this.newDevice.room)
-          const result = await this.addDeviceToRoom({ roomId: room.id, deviceId: device.id})
-          console.log('Link device to room:', result)
+          await this.addDeviceToRoom({ roomId: room.id, deviceId: device.id})
         }
         this.closeDialog()
         this.snackbar.text = "Device created successfully"

@@ -14,7 +14,7 @@
                 ></v-select>
             </v-col>
             <v-col>
-                <v-btn color="primary" large fab @click="turnOnOff()">
+                <v-btn :disabled="disabled" color="primary" large fab @click="turnOnOff()">
                     <v-icon large>{{statusIcon}}</v-icon>
                 </v-btn>
             </v-col>
@@ -80,6 +80,7 @@ export default {
         device: {
             required: true,
         },
+        disabled: Boolean,
     },
 
     data () {
@@ -119,7 +120,7 @@ export default {
             execute: "action",
             getState: "getState",
         }),
-        async turnOnOff() {
+        turnOnOff() {
             let action
             switch (this.device.state.status) {
                 case 'off':
@@ -132,54 +133,44 @@ export default {
                     action = 'turnOff'
                     break;
             }
-            await this.execute({ id: this.device.id, actionName: action})
-            await this.updateStatus()
+
+            this.$emit('action', { id: this.device.id, actionName: action})
         },
-        async setMode() {
-            await this.execute({
+        setMode() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setMode",
                 params: [this.mode.toLowerCase()]
-            })
+            })    
         },
-        async setVertical() {
-            await this.execute({
+        setVertical() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setVerticalSwing",
                 params: [this.verticalSwing.toLowerCase()]
             })
         },
-        async setHorizontal() {
-            await this.execute({
+        setHorizontal() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setHorizontalSwing",
                 params: [this.horizontalSwing.toLowerCase()]
             })
         },
-        async setTemp() {
-            await this.execute({
+        setTemp() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setTemperature",
                 params: [this.temperature]
             })
         },
-        async setSpeed() {
-            await this.execute({
+        setSpeed() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setFanSpeed",
                 params: [this.speed]
             })
         },
-        async updateStatus() {
-            try {
-                const result = await this.getState(this.device.id)
-                if (result.status == "on") {
-                    setTimeout(this.updateStatus, 1000)
-                }
-            } catch (error) {
-                console.error(error)
-            }
-        }
     },
 }
 </script>

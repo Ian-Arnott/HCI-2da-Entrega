@@ -24,8 +24,13 @@ export default {
             return state.rooms.find(room => room.name == roomName);
         },
         getActiveDevices: () => (devices) => {
-            // TODO
-            return !devices ? 0 : devices.filter(device => device.state.status == "on").length
+            if (!devices) return 0
+            let inactiveStates = ['off', 'stopped', 'paused', 'disarmed']
+            let count = 0
+            devices.forEach(device => {
+                if (!inactiveStates.find(state => state == device.state.status)) count++
+            });
+            return count
         }
     },
     actions: {

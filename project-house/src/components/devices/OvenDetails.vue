@@ -14,7 +14,7 @@
                 ></v-select>
             </v-col>
             <v-col>
-                <v-btn color="primary" large fab @click="turnOnOff()">
+                <v-btn :disabled="disabled" color="primary" large fab @click="turnOnOff()">
                     <v-icon large>{{statusIcon}}</v-icon>
                 </v-btn>
             </v-col>
@@ -69,6 +69,7 @@ export default {
         device: {
             required: true,
         },
+        disabled: Boolean,
     },
 
     data () {
@@ -106,7 +107,7 @@ export default {
             execute: "action",
             getState: "getState",
         }),
-        async turnOnOff() {
+        turnOnOff() {
             let action
             switch (this.device.state.status) {
                 case 'off':
@@ -119,47 +120,36 @@ export default {
                     action = 'turnOff'
                     break;
             }
-            await this.execute({ id: this.device.id, actionName: action})
-            await this.updateStatus()
+            this.$emit('action', { id: this.device.id, actionName: action})
         },
-        async setHeatMode() {
-            await this.execute({
+        setHeatMode() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setHeat",
                 params: [this.heat.toLowerCase()]
             })
         },
-        async setGrill() {
-            await this.execute({
+        setGrill() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setGrill",
                 params: [this.grill.toLowerCase()]
             })
         },
-        async setConvection() {
-            await this.execute({
+        setConvection() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setConvection",
                 params: [this.convection.toLowerCase()]
             })
         },
-        async setTemp() {
-            await this.execute({
+        setTemp() {
+            this.$emit('action', {
                 id: this.device.id,
                 actionName: "setTemperature",
                 params: [this.temperature]
             })
         },
-        async updateStatus() {
-            try {
-                const result = await this.getState(this.device.id)
-                if (result.status == "on") {
-                    setTimeout(this.updateStatus, 1000)
-                }
-            } catch (error) {
-                console.error(error)
-            }
-        }
     },
 }
 </script>

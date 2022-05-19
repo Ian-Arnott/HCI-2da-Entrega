@@ -57,6 +57,9 @@ export default {
     ...mapActions("deviceTypes", {
       getDeviceTypes: "getAll",
     }),
+    ...mapActions("routines", {
+      getRoutines: "getAll",
+    }),
   },
 
   async created() {
@@ -64,6 +67,7 @@ export default {
       // await this.getRooms(); // lo hago en rooms page
       await this.getDevices();
       await this.getDeviceTypes();
+      await this.getRoutines();
     } catch (error) {
       console.error(error);
     }

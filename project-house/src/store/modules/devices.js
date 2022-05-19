@@ -12,6 +12,9 @@ export default {
         getDeviceById: (state) => (deviceId) => {
             return state.devices.find(device => device.id == deviceId);
         },
+        getDeviceByName: (state) => (name) => {
+            return state.devices.find(device => device.name == name);
+        },
         getDevicesByRoom: (state) => (room) => {
             if(room.id == "all-devices") return state.devices
             return state.devices.filter(device => device.room && device.room.id == room.id)
@@ -23,16 +26,16 @@ export default {
 
             return devices.filter(device => device.type.id == type.id)
         },
-        getActiveDevicesByRoom: (state) => (room) => {
+        getActiveDevicesByRoom: (state, getters, rootState) => (room) => {
             let devices = [];
 
-            if (room && room.id != 0) {
-                devices = state.devices.filter(device => device.room == room.id);
+            if (room.id != "all-devices") {
+                devices = state.devices.filter(device => device.room.id == room.id);
             } else {
                 devices = state.devices;
             }
 
-            return devices.filter(device => device.state != 0);
+            return rootState.getters['rooms/getActiveDevices'](devices)
         },
     },
 

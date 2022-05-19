@@ -21,7 +21,7 @@
       </v-col>
       <v-col>
         <v-btn large icon @click="prevSong()"><v-icon>mdi-skip-previous</v-icon></v-btn>
-        <v-btn color="primary" large fab @click="playPause()"><v-icon large>{{ statusIcon }}</v-icon></v-btn>
+        <v-btn :disabled="disabled" color="primary" large fab @click="playPause()"><v-icon large>{{ statusIcon }}</v-icon></v-btn>
         <v-btn large icon @click="nextSong()"><v-icon>mdi-skip-next</v-icon></v-btn>
       </v-col>
       <v-col>
@@ -37,7 +37,7 @@
       </v-col>
       <v-col cols="12" v-if="device.state.status != 'stopped'">
         <v-label>{{ device.state.song.progress }} / {{ device.state.song.duration }}</v-label>
-        <v-btn class="mb-1" large icon color="primary" @click="stop()"><v-icon large>mdi-stop-circle</v-icon></v-btn>
+        <v-btn :disabled="disabled" class="mb-1" large icon color="primary" @click="stop()"><v-icon large>mdi-stop-circle</v-icon></v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -50,6 +50,7 @@ export default {
     device: {
       required: true,
     },
+    disabled: Boolean,
   },
 
   data() {
@@ -101,10 +102,10 @@ export default {
       execute: "action",
       getState: "getState",
     }),
-    async stop() {
-      await this.execute({ id: this.device.id, actionName: 'stop' })
+    stop() {
+      this.$emit('action', { id: this.device.id, actionName: 'stop' })
     },
-    async playPause() {
+    playPause() {
       let action
       switch (this.device.state.status) {
         case 'stopped':
@@ -117,44 +118,28 @@ export default {
           action = 'pause'
           break;
       }
-      await this.execute({ id: this.device.id, actionName: action })
-      await this.updateStatus()
+      this.$emit('action', { id: this.device.id, actionName: action })
     },
-    async prevSong() {
-      await this.execute({ id: this.device.id, actionName: "previousSong" })
+    prevSong() {
+      this.$emit('action', { id: this.device.id, actionName: "previousSong" })
     },
-    async nextSong() {
-      await this.execute({ id: this.device.id, actionName: "nextSong" })
+    nextSong() {
+      this.$emit('action', { id: this.device.id, actionName: "nextSong" })
     },
-    async setGenre() {
-      console.log(this.genre)
-      await this.execute({ 
+    setGenre() {
+      this.$emit('action', { 
         id: this.device.id, 
         actionName: "setGenre", 
         params: [this.genre.toLowerCase()] 
       })
     },
-    async setVolume() {
-      await this.execute({ 
+    setVolume() {
+      this.$emit('action', { 
         id: this.device.id, 
         actionName: "setVolume", 
         params: [this.volume] 
       })
     },
-    // para simular el paso del tiempo
-    async updateStatus() {
-      try {
-        const result = await this.getState(this.device.id)
-        if (result.status == "playing") {
-          setTimeout(this.updateStatus, 1000)
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
   },
-  async created() {
-    await this.updateStatus()
-  }
 };
 </script>

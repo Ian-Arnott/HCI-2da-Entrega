@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-icon size="100px" @click="onOff()">{{ icon }}</v-icon>
+    <v-icon :disabled="disabled" size="100px" @click="onOff()">{{ icon }}</v-icon>
     <p>{{ device.state.status }}</p>
     <v-slider
       prepend-icon="mdi-brightness-6"
@@ -39,6 +39,7 @@ export default {
     device: {
       required: true,
     },
+    disabled: Boolean,
   },
   data() {
     return {
@@ -64,23 +65,22 @@ export default {
       execute: "action",
       getState: "getState",
     }),
-    async onOff() {
+    onOff() {
       let action = "turnOn";
       if (this.device.state.status == "on") {
         action = "turnOff";
       }
-      await this.execute({ id: this.device.id, actionName: action });
+      this.$emit('action', { id: this.device.id, actionName: action });
     },
-    async setBrightness() {
-      await this.execute({ 
+    setBrightness() {
+      this.$emit('action', { 
         id: this.device.id, 
         actionName: 'setBrightness',
         params: [this.brightness]   
       });
     },
-    async setColor() {
-      console.log('color', this.color)
-      await this.execute({ 
+    setColor() {
+      this.$emit('action', { 
         id: this.device.id, 
         actionName: 'setColor',
         params: [this.color]   

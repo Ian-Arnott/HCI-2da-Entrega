@@ -27,14 +27,25 @@
       </v-col>
       <v-col cols="12">
         <router-view :key="$route.path"/>
+        <!-- Loading animation -->
+        <LoadingAnimation v-show="loading"/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import LoadingAnimation from "@/components/LoadingAnimation"
 
 export default {
-  title: 'Home - Project House'
+  title: 'Home - Project House',
+  components: {
+    LoadingAnimation,
+  },
+  computed: {
+    loading() {
+      return this.$store.getters["loading"];
+    },
+  },
 };
 </script>

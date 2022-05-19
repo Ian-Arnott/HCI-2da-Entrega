@@ -104,9 +104,9 @@
 
     <v-card-title>{{ room.name }}</v-card-title>
     <v-card-text align="left"
-      >{{ room.meta.deviceCount }} devices
+      >{{ devices.length + `${devices.length == 1 ? ' device': ' devices'}` }}
       <v-icon>mdi-circle-small</v-icon>
-      {{ room.meta.activeDeviceCount }} active
+      {{ activeDevices }} active
     </v-card-text>
   </v-card>
 </template>
@@ -144,10 +144,16 @@ export default {
   },
   computed: {
     ...mapGetters("devices", {
-      getDevicesFromRoom: "getDevicesByRoom"
+      getDevicesFromRoom: "getDevicesByRoom",
+    }),
+    ...mapGetters("rooms", {
+      getActiveDevices: "getActiveDevices"
     }),
     devices() {
       return this.getDevicesFromRoom(this.room)
+    },
+    activeDevices() {
+      return this.getActiveDevices(this.devices)
     }
   },
   methods: {
@@ -199,14 +205,11 @@ export default {
     },
     async deleteRoom() {
       let snackbar = {show: true, text: ""}
-      console.log(this.deleteOption)
       if (this.deleteOption == 0) {
         // remove devices
-        console.log('devices:', this.devices)
         try {
           for (let i = 0; i < this.devices.length; i++) {
-            const result = await this.deleteDevice(this.devices[i].id)
-            console.log(result)
+            await this.deleteDevice(this.devices[i].id)
           }
         } catch (error) {
           console.error(error)
@@ -216,8 +219,7 @@ export default {
 
       // remove room
       try {
-        const result = await this.$deleteRoom(this.room.id)
-        console.log(result)
+        await this.$deleteRoom(this.room.id)
         snackbar.text = "Room deleted successfully"
       } catch (error) {
         console.error(error)

@@ -4,8 +4,9 @@
     <v-container class="text-center pa-0">
       <h1 class="display-1 ma-3">{{ room.name }}</h1>
       <p class="subheading font-weight-regular">
-        {{ deviceCount }} devices<v-icon>mdi-circle-small</v-icon
-        >{{ activeDeviceCount }} active
+        {{ devices.length + `${devices.length == 1 ? ' device': ' devices'}` }}
+        <v-icon>mdi-circle-small</v-icon
+        >{{ activeDevices }} active
       </p>
     </v-container>
 
@@ -15,7 +16,7 @@
     </v-container>
 
     <!-- Devices -->
-    <v-list v-else-if="deviceCount != 0" class="text-center">
+    <v-list v-else-if="devices.length != 0" class="text-center">
       <DeviceList
         v-for="type in deviceTypes"
         :key="type.id"
@@ -65,22 +66,22 @@ export default {
   },
 
   computed: {
-    ...mapState("rooms", {
-      rooms: (state) => state.rooms,
+    ...mapGetters("devices", {
+      getDevicesFromRoom: "getDevicesByRoom"
     }),
     ...mapGetters("rooms", {
       getRoomByName: "getRoomByName",
+      getActiveDevices: "getActiveDevices",
     }),
     room() {
       return this.getRoomByName(this.slug);
     },
-    deviceCount() {
-      return this.room.meta.deviceCount;
+    devices() {
+      return this.getDevicesFromRoom(this.room)
     },
-    activeDeviceCount() {
-      return this.room.meta.activeDeviceCount;
+    activeDevices() {
+      return this.getActiveDevices(this.devices)
     },
-
     ...mapState("deviceTypes", {
       deviceTypes: (state) => state.deviceTypes,
     }),
