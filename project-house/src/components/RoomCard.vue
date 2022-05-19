@@ -29,7 +29,7 @@
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </template>
-
+        
         <!-- Dialog content -->
         <v-card class="text-center overflow-hidden" max-width="600px">
           <v-toolbar flat>
@@ -90,6 +90,7 @@
                 </v-col>
               </v-row>
             </v-form>
+          <LoadingAnimation v-show="loading"/>
           </v-card-text>
 
           <v-divider></v-divider>
@@ -113,7 +114,13 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+
+import LoadingAnimation from "@/components/LoadingAnimation"
+
 export default {
+  components: {
+    LoadingAnimation
+  },
   props: {
     room: {
       required: true,
@@ -121,6 +128,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       cardHovered: false,
       editMenu: false,
       confirmMenu: false,
@@ -179,6 +187,7 @@ export default {
 
       let snackbar = { show: true, text: "" }
 
+      this.loading = true
       try {
         await this.$editRoom({ 
           id: this.room.id, 
@@ -201,16 +210,18 @@ export default {
         }
       } finally {
         this.$store.dispatch('setSnackbar', snackbar)
+        this.loading = false
       }
     },
     async deleteRoom() {
+      // this.loading = true
       let snackbar = {show: true, text: ""}
       if (this.deleteOption == 0) {
         // remove devices
         try {
           for (let i = 0; i < this.devices.length; i++) {
             await this.deleteDevice(this.devices[i].id)
-          }
+          }          
         } catch (error) {
           console.error(error)
           snackbar.text = "There was an error deleting this room's devices"
@@ -226,6 +237,7 @@ export default {
         snackbar.text = "There was an error deleting the room"
       }
 
+      // this.loading = false
       this.$store.dispatch("setSnackbar", snackbar)
     }
   }

@@ -86,6 +86,7 @@
         <v-btn v-show="isEditing" :disabled="!changed() || !valid" color="primary" @click="save">Save</v-btn>
       </v-card-actions>
     </v-card>
+    <LoadingAnimation v-show="loading"/>
   </v-dialog>
 </template>
 
@@ -97,6 +98,8 @@ import AlarmDetails from "@/components/devices/AlarmDetails"
 import OvenDetails from "@/components/devices/OvenDetails"
 import ACDetails from "@/components/devices/ACDetails"
 
+import LoadingAnimation from "@/components/LoadingAnimation"
+
 export default {
   components: {
     SpeakerDetails,
@@ -104,6 +107,7 @@ export default {
     AlarmDetails,
     OvenDetails,
     ACDetails,
+    LoadingAnimation
   },
 
   props: {
@@ -114,6 +118,7 @@ export default {
 
   data() {
     return {
+      loading: false,
       valid: false,
       isEditing: false,
       newDeviceName: "",
@@ -267,6 +272,7 @@ export default {
     async executeAction(data) {
       // console.log('Llamada al api')
       try {
+        this.loading = true
         const result = await this.$executeAction(data)
         console.log('Result', result)
 
@@ -274,6 +280,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
+      this.loading = false
     },
     // para simular el paso del tiempo
     async updateStatus() {

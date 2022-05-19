@@ -51,7 +51,6 @@ export default {
     },
     getItemName(action, device) {
       let itemName;
-      let deviceName = device.name;
       let roomName = device.room ? device.room.name : "";
       let paramName = (action.params && action.params[0]) ? action.params[0] : "";
       let unit = "";
@@ -67,7 +66,7 @@ export default {
           break;
         case "setTemperature":
           itemName = "Set";
-          unit = "°C";
+          unit = " °C";
           break;
         // ac
         case "setVerticalSwing":
@@ -110,13 +109,17 @@ export default {
           itemName = "Skip a track";
           break;
         case "previousSong":
-          itemName = "Go back";
+          itemName = "Go back a track";
           break;
         // oven
         case "setConvection":
+          if (paramName != 'complete')
+            return `Turn ${paramName} convection mode`
           itemName = "Set convection mode";
           break;
         case "setGrill":
+          if (paramName != 'complete')
+            return `Turn ${paramName} grill mode`
           itemName = "Set grill mode";
           break;
         case "setHeat":
@@ -127,8 +130,8 @@ export default {
           break;
       }
 
-      itemName = `${itemName} '${deviceName}' ${roomName ? `(${roomName})` : ""
-      } ${paramName ? `to ${paramName} ${unit ? unit : ""}` : ""}`;
+      itemName = `${itemName} ${roomName ? `(${roomName})` : ""
+      } ${paramName ? `to ${paramName}${unit ? unit : ""}` : ""}`;
       return itemName;
     },
   },

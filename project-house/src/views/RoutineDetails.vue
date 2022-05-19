@@ -20,11 +20,15 @@
       </v-col>
 
       <!-- Actions -->
-      <v-row justify="start">
-        <v-col cols="4" v-for="item in routineMapped" :key="item.device.name">
+      <div class="items">
+        <div class="item" v-for="item in routineMapped" :key="item.device.name">
           <RoutineActionCard :item="item" disabled />
+        </div>
+      </div>
+      <!-- <v-row justify="start">
+        <v-col cols="4" v-for="item in routineMapped" :key="item.device.name">
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </v-container>
 </template>
@@ -114,3 +118,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.items {
+  column-count: 3;
+  column-gap: 14px;
+}
+
+.item {
+  max-block-size: 30%;
+  display: inline-block;
+  width: 100%;
+  margin: 7px 0;
+}
+</style>

@@ -112,14 +112,19 @@
         <v-subheader>Device Actions</v-subheader>
         <v-divider></v-divider>
       </v-col>
-      <v-row justify="start">
+      <div class="items">
+        <div class="item" v-for="item in routine" :key="item.device.name">
+          <RoutineActionCard :item="item" @actionDeleted="deleteDeviceAction(item)"/>
+        </div>
+      </div>
+      <!-- <v-row justify="start">
         <v-col cols="4" v-for="item in routine" :key="item.device.name">
           <RoutineActionCard
             :item="item"
             @actionDeleted="deleteDeviceAction(item)"
           />
         </v-col>
-      </v-row>
+      </v-row> -->
     </v-container>
   </v-container>
 </template>
@@ -334,3 +339,42 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.items {
+  column-count: 3;
+  column-gap: 10px;
+  padding: 0 5px;
+}
+
+.item {
+  display: inline-block;
+  width: 100%;
+  margin: 5px 0;
+}
+
+/* Make it responsive */
+@media only screen and (max-width: 1000px) {
+  .items {
+    column-count: 4;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .items {
+    column-count: 3;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .items {
+    column-count: 2;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .items {
+    column-count: 1;
+  }
+}
+</style>

@@ -48,7 +48,7 @@
 
                 <v-card dark color="warning">
                   <v-card-title>Delete Confirmation</v-card-title>
-                  <v-card-text>Are you sure you want to delete {{routine.name}}?</v-card-text>
+                  <v-card-text>Are you sure you want to delete "{{routine.name}}"?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn text @click="closeDeleteConfirmation()">cancel</v-btn>
@@ -62,13 +62,19 @@
         </v-list-item-action>
       </v-list-item>
     </v-card-text>
+    <LoadingAnimation v-show="loading"/>
   </v-card>
 </template>
 
 <script>
 import { mapActions } from "vuex";
 
+import LoadingAnimation from "@/components/LoadingAnimation"
+
 export default {
+  components: {
+    LoadingAnimation
+  },
   props: {
     routine: {
       required: true,
@@ -76,6 +82,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       routineHovered: false,
       contextMenu : false,
       deleteMenu: false
@@ -90,17 +97,20 @@ export default {
     async executeRoutine() {
       let snackbar = { show: true, text: "" };
       try {
+        this.loading = true
         await this.$executeRoutine(this.routine.id);
         snackbar.text = "Routine executed successfully";
       } catch (error) {
         snackbar.text = `There was an error executing routine ${this.routine.name}`;
         console.error(error);
       }
+      this.loading = false
       this.$store.dispatch("setSnackbar", snackbar);
     },
     async deleteRoutine() {
       let snackbar = { show: true, text: "" };
       try {
+        this.loading = true
         await this.$deleteRoutine(this.routine.id);
         snackbar.text = "Routine deleted successfully";
       } catch (error) {
@@ -109,6 +119,7 @@ export default {
       }
       this.$store.dispatch("setSnackbar", snackbar);
       this.closeDeleteConfirmation()
+      this.loading = false
     },
     closeDeleteConfirmation() {
       this.deleteMenu = false
