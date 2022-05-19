@@ -13,8 +13,8 @@
     <v-row justify="center">
       <v-dialog v-model="colorMenu" max-width="300px">
         <template v-slot:activator="{ attrs, on }">
-          <v-btn fab small :color="color" v-bind="attrs" v-on="on">
-            <v-icon>mdi-eyedropper</v-icon>
+          <v-btn @mouseenter="hovered = true" @mouseleave="hovered = false" fab small :color="color" v-bind="attrs" v-on="on">
+            <v-icon v-show="hovered || colorMenu" color="secondary">mdi-eyedropper</v-icon>
           </v-btn>
         </template>
 
@@ -42,6 +42,7 @@ export default {
   },
   data() {
     return {
+      hovered: false,
       states: this.$store.getters['getDeviceStates']('lamp'),
       color: this.device.state.color,
       colorMenu: false,

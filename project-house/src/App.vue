@@ -44,7 +44,7 @@ export default {
       return this.$store.getters["connected"];
     },
     showAddButton() {
-       return this.connected && this.$route.name != 'NotFound'
+       return this.connected && this.$route.name != 'NotFound' && this.$route.name != 'CreateRoutine'
     }
   },
   methods: {

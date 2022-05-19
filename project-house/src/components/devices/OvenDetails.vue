@@ -78,7 +78,7 @@ export default {
             minTemp: 90,
             maxTemp: 230,
             heat: this.device.state.mode,
-            heatModes: ["Convetional", "Top", "Bottom"],
+            heatModes: ["Conventional", "Top", "Bottom"],
             grill: this.device.state.grill,
             grillModes: ["Off", "On", "Complete"],
             convection: this.device.state.convection,

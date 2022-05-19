@@ -51,6 +51,11 @@ const routes = [
             })
         }
     },
+    {
+        path: '/routines/create',
+        name: 'CreateRoutine',
+        component: () => import(/* webpackChunkName: "create-routine" */"@/views/CreateRoutinePage"),
+    },
 
     // Default route (not found)
     {

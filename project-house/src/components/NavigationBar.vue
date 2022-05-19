@@ -15,8 +15,8 @@
       <v-menu max-width="200" open-on-hover v-model="language" bottom left offset-y transition="slide-y-transition">
 
         <template v-slot:activator="{ on, attrs }">
-          <v-btn small id="languageMenuButton" elevation="0" v-bind="attrs" v-on="on">
-            <v-icon>mdi-help-circle</v-icon>
+          <v-btn v-show="navBarActive" small id="languageMenuButton" elevation="0" v-bind="attrs" v-on="on">
+            <v-icon>mdi-help-circle-outline</v-icon>
           </v-btn>
         </template>
 
@@ -38,6 +38,11 @@ export default {
       language: false,
     };
   },
+  computed: {
+    navBarActive() {
+      return this.$route.name != 'CreateRoutine'
+    }
+  }
 };
 </script>
 

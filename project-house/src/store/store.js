@@ -21,7 +21,8 @@ export default new Vuex.Store({
         states: [
           { status: "off", icon: "mdi-lightbulb-off" },
           { status: "on", icon: "mdi-lightbulb-on" }
-        ]
+        ],
+        defaultIcon: 'mdi-lightbulb',
       },
       {
         name: "speaker",
@@ -29,7 +30,8 @@ export default new Vuex.Store({
           { status: "stopped", icon: "mdi-speaker-off" },
           { status: "playing", icon: "mdi-speaker" },
           { status: "paused", icon: "mdi-speaker" },
-        ]
+        ],
+        defaultIcon: 'mdi-speaker',
       },
       {
         name: "alarm",
@@ -37,21 +39,24 @@ export default new Vuex.Store({
           { status: "armedStay", icon: "mdi-shield-home" },
           { status: "armedAway", icon: "mdi-shield-lock" },
           { status: "disarmed", icon: "mdi-shield-off" },
-        ]
+        ],
+        defaultIcon: 'mdi-shield',
       },
       {
         name: "oven",
         states: [
           { status: "off", icon: "mdi-stove" },
           { status: "on", icon: "mdi-stove" }
-        ]
+        ],
+        defaultIcon: 'mdi-stove',
       },
       {
         name: "ac",
         states: [
           { status: "off", icon: "mdi-air-conditioner" },
           { status: "on", icon: "mdi-air-conditioner" }
-        ]
+        ],
+        defaultIcon: 'mdi-air-conditioner',
       }
     ]
   },
@@ -61,7 +66,10 @@ export default new Vuex.Store({
     deviceStates: state => state.deviceStates,
     getDeviceStates: (state) => (name) => {
       return state.deviceStates.find(s => s.name == name).states
-    }
+    },
+    getDefaultDeviceIcon: (state) => (name) => {
+      return state.deviceStates.find(s => s.name == name).defaultIcon
+    },
   },
   mutations: {
     'SET_CONNECTED'(state, payload) {
