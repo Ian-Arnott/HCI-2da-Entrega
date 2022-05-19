@@ -6,7 +6,7 @@ Requisitos previos:
 3. tener la API provista instalada y corriendo
 
 Pasos para instalación y ejecucion:
-1. extraer el archivo projectHouse_grupo3.zip
+1. extraer el archivo projectHouse_grupo4.zip
 2. ubicarse en el direcorio ./dist
 3. en la terminal, ubicado en el directorio actual, correr 
 npm run serve
