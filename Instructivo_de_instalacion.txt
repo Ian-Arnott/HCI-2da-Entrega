@@ -1,5 +1,5 @@
 Instructivo PROJECT HOUSE
-Link al GitHub: https://github.com/ianitba/HCI-2da-Entrega
+Link al GitHub repo: https://github.com/ianitba/HCI-2da-Entrega
 
 Requisitos previos:
 1. Node.JS v16.15 o mayor
@@ -7,10 +7,10 @@ Requisitos previos:
 3. tener la API provista instalada y corriendo
 
 Pasos para instalación y ejecucion:
-1. extraer el archivo projectHouse_grupo4.zip
-2. ubicarse en el direcorio ./dist
-3. en la terminal, ubicado en el directorio actual, correr 
-npm run serve
+1. extraer el archivo projectHouse_grupo4.zip en algun directorio temporal
+2. ubicarse en el direcorio /HCI-2da-Entrega/project-house/
+3. en la terminal hacer npm update 
+4. en la terminal hacer npm run serve para correr en modo development
 
 Modificar URL de conexion con el api:
 - La URL de conexion con el api se encuentra en la linea 3 del archivo src/api/api.js
