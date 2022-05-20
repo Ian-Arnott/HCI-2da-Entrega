@@ -10,3 +10,6 @@ Pasos para instalación y ejecucion:
 2. ubicarse en el direcorio ./dist
 3. en la terminal, ubicado en el directorio actual, correr 
 npm run serve
+
+Modificar URL de conexion con el api:
+- La URL de conexion con el api se encuentra en la linea 3 del archivo src/api/api.js

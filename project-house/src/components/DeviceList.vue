@@ -79,53 +79,31 @@ export default {
           ? this.selected.length == this.devices.length
           : false;
       },
-      set(value) {
+      async set(value) {
+        if (this.deviceType.name != "lamp") return 
+
+        console.log('soy una lampara')
         let selected = [];
-        let state;
+        let action;
 
         if (value) {
           this.devices.forEach((device) => {
             selected.push(device.id.toString());
           });
-          state = 1;
+          action = 'turnOn';
         } else {
-          state = 0;
+          action = 'turnOff';
         }
 
         // llamada a api
-        // const p = await Promise.all(this.devices.map(async (device) => {
-        //   if (device.state == state) {
-        //     console.log("No hay cambio de estado " + device.name);
-        //     return;
-        //   }
-
-        // }))
-        this.devices.forEach((device) => {
-          // no llamo al api en este caso
-          if (device.state == state) {
-            console.log("No hay cambio de estado " + device.name);
-            return;
-          }
-
-          // api.setDeviceState(
-          //   device.id,
-          //   state,
-          //   () => { // ok
-          //     let data = { deviceId: device.id, newState: state };
-          //     store.commit("setDeviceState", data);
-          //   },
-          //   () => { // error
-          //     console.error("Api error: " + device.name);
-          //     // sacar de lista
-          //     if (value) {
-          //       selected = selected.filter((id) => id != device.id);
-          //     } else {  // agregar a lista
-          //       selected.push(device.id.toString());
-          //     }
-          //     this.selected = selected;
-          //   }
-          // );
-        });
+        await Promise.all(
+          this.devices.map(async (device) => {
+            return await this.executeAction({
+              id: device.id,
+              actionName: action,
+            });
+          })
+        );
 
         this.selected = selected;
       },
@@ -150,12 +128,6 @@ export default {
       if(this.deviceType.name != 'lamp') return false
       return this.listHovered || this.selectAll
     },
-    execute() {
-      //
-      //
-      //
-      //
-    }
   },
 
   created() {
