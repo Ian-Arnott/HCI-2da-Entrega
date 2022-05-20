@@ -1,4 +1,5 @@
 Instructivo PROJECT HOUSE
+Link al GitHub: https://github.com/ianitba/HCI-2da-Entrega
 
 Requisitos previos:
 1. Node.JS v16.15 o mayor
