@@ -250,7 +250,6 @@ export default {
 
         for (let i = 0; i < routinesToDelete.length; i++) {
           const routine = routinesToDelete[i];
-          console.log('Deleting routine', routine.name)     
           await this.deleteRoutine(routine.id)     
         }
       } catch (error) {
@@ -273,8 +272,7 @@ export default {
       // console.log('Llamada al api')
       try {
         this.loading = true
-        const result = await this.$executeAction(data)
-        console.log('Result', result)
+        await this.$executeAction(data)
 
         if(this.device.type.name == 'speaker') await this.updateStatus()
       } catch (error) {

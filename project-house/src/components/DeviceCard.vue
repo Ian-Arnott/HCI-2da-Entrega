@@ -40,7 +40,7 @@ export default {
 
   computed: {
     isActive() {
-      console.log(`${this.device.name}: ${this.device.state.status}`);
+      // console.log(`${this.device.name}: ${this.device.state.status}`);
       return !this.inactiveStates.includes(this.device.state.status);
     },
     icon() {
@@ -80,11 +80,10 @@ export default {
       }
 
       try {
-        const result =  await this.execute({
+        await this.execute({
           id: this.device.id,
           actionName: action,
         })
-        console.log(result)
         this.$emit("switched");
       } catch (error) {
         console.error(error)

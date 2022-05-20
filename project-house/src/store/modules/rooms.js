@@ -67,7 +67,7 @@ export default {
                 room.meta.activeDeviceCount = getters.getActiveDevices(devices)
                 activeDeviceCount += room.meta.activeDeviceCount
                 room.meta.editable = true
-                console.log('Room id:', room.id)
+                // console.log('Room id:', room.id)
             }
 
             const allDevices = {

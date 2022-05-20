@@ -90,9 +90,9 @@ export default {
 
       try {
         room = await this.$addRoom(room);
-        room = Object.assign(new Room(), room);
+        Object.assign(new Room(), room);
 
-        console.log(room);
+        // console.log(room);
         this.closeDialog()
         this.snackbar.text = "Room created successfully";
       } catch (error) {

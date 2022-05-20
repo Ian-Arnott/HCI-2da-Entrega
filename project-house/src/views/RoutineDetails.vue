@@ -70,14 +70,12 @@ export default {
       return this.getRoutineByName(this.slug);
     },
     routineMapped() {
-      console.log("rutinita", this.routine);
       let routine = [];
       this.routine.actions.forEach((action) => {
         let item = routine.find(
           (item) => item.device.name == action.device.name
         );
         if (!item) {
-          console.log("rutina mapeada vacia");
           routine.push({
             device: {
               name: action.device.name,
